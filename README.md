@@ -1,2 +1,3 @@
-# mcas
- Motion-Canvas Asset Set
+# MCAS
+
+Motion-Canvas Asset Set

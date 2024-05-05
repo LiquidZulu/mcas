@@ -1,12 +1,14 @@
-import {Circle, makeScene2D} from '@motion-canvas/2d';
-import {createRef} from '@motion-canvas/core';
+import { makeScene2D, Txt } from "@motion-canvas/2d";
+import { colors, glow } from "../";
 
 export default makeScene2D(function* (view) {
-  // Create your animations here
+  view.fill(colors.bg);
 
-  const circle = createRef<Circle>();
-
-  view.add(<Circle ref={circle} size={320} fill={'lightseagreen'} />);
-
-  yield* circle().scale(2, 2).to(1, 2);
+  view.add(
+    glow(
+      <Txt fontFamily="Oswald" fontSize={150} fill="red">
+        BLAH
+      </Txt>
+    )
+  );
 });
