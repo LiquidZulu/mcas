@@ -9,11 +9,11 @@ export default makeScene2D(function* (view) {
   const txt = createRef<Txt>();
 
   view.add(
-    effects(
+    effects(glow)(
       <Txt ref={txt} fontFamily="Oswald" fontSize={150} fill={new Color("red")}>
         BLAH
       </Txt>
-    ).glow()
+    )
   );
 
   yield* tween(2, (value) => {
