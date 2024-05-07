@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cp "src/scenes/example.meta" "src/scenes/$1.meta"
+cp "src/scenes/example.tsx" "src/scenes/$1.tsx"
