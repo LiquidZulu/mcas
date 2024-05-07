@@ -7,10 +7,9 @@ import {
     signal,
 } from '@motion-canvas/2d';
 import { createSignal, SimpleSignal } from '@motion-canvas/core/lib/signals';
-import { Color, PossibleColor } from '@motion-canvas/core/lib/types';
-import { TCorners, TVec2, UnwrapSimpleSignals } from '../';
+import { Color } from '@motion-canvas/core/lib/types';
+import { TCorners, TVec2 } from '../';
 import { vectorSum } from '../util';
-import { all } from '@motion-canvas/core';
 
 export interface SquigglyBorderProps extends LineProps {
     lineWidth?: SimpleSignal<number, Line>;
@@ -30,7 +29,7 @@ export class SquigglyBorder extends Line {
     @signal()
     public declare readonly stroke: CanvasStyleSignal<this>;
 
-    @initial(0.3)
+    @initial(0.2)
     @signal()
     public declare readonly duration: SimpleSignal<number, this>;
 
