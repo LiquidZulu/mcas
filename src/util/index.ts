@@ -1,1 +1,2 @@
-export { vectorSum } from "./vectorSum";
+export * from './vectorSum';
+export * from './generateTxt';
