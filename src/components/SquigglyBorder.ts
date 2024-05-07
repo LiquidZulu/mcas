@@ -14,7 +14,6 @@ import { vectorSum } from '../util';
 export interface SquigglyBorderProps extends LineProps {
     lineWidth?: SimpleSignal<number, Line>;
     duration?: SimpleSignal<number, Line>;
-    runtime?: SimpleSignal<number, Line>;
     corners?: SimpleSignal<TCorners, Line>;
     offsetsList?: SimpleSignal<TCorners[], Line>;
     currentOffset?: SimpleSignal<number, Line>;
