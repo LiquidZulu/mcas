@@ -1,2 +1,9 @@
+#+options: toc:nil
+
 * MCAS
 Motion Canvas Asset Set provides motion canvas assets that are frequently used on my YouTube channel ([[https://youtube.com/liquidzulu][LiquidZulu]]). This repository is currently under development, so do not count on it.
+
+#+toc: headlines 2
+
+* Usage
+Documentation is provided in the [[https://github.com/LiquidZulu/mcas/tree/main/src][src]] directory.

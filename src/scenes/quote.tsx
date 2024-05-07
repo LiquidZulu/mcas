@@ -38,7 +38,7 @@ export function makeQuoteScene(
   return description;
 }
 
-export default function makeQuote(
+export function makeQuote(
   card: string,
   quoteText: string,
   citationText: TRichText

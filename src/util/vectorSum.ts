@@ -1,4 +1,4 @@
-import { TVec2 } from "../types";
+import { TVec2 } from '../';
 
 export const vectorSum = (vecs: TVec2[]) =>
   vecs.reduce(
