@@ -1,25 +1,17 @@
 import { makeScene2D, Rect } from '@motion-canvas/2d';
-import {
-    Color,
-    tween,
-    createRef,
-    easeInOutCubic,
-    loop,
-} from '@motion-canvas/core';
-import { McasTxt as Txt, colors, SquigglyBorder } from '../';
+import { createRef, waitFor } from '@motion-canvas/core';
+
+import { popin, popout, colors } from '../';
 
 export default makeScene2D(function* (view) {
     view.fill(colors.bg);
 
-    const squig = createRef<SquigglyBorder>();
+    const blah = createRef<Rect>();
 
-    view.add(
-        <SquigglyBorder ref={squig}>
-            <Rect width={500} height={500} fill="orange" />
-        </SquigglyBorder>
-    );
+    view.add(<Rect ref={blah} width={500} height={500} fill="orange" />);
 
-    for (let i = 0; i < 50; ++i) {
-        yield* squig().wiggle();
-    }
+    yield* popin(blah);
+    yield* blah().scale(1.5, 5);
+    yield* waitFor(1);
+    yield* popout(blah);
 });
