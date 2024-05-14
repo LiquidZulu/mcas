@@ -1,3 +1,4 @@
 node_modules/
 cli/dist/
 dist/
+.direnv
