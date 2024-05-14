@@ -1,11 +1,17 @@
 import {
   Color,
   FullSceneDescription,
+  Thread,
+  ThreadGenerator,
   ValueDispatcher,
   all,
   createRef,
   createRefArray,
+  join,
   linear,
+  loop,
+  loopUntil,
+  run,
   waitFor,
 } from '@motion-canvas/core';
 import {
@@ -25,7 +31,7 @@ export function makeQuoteScene(
   card: string,
   quoteText: string,
   citationText: TRichText[],
-  name: string
+  name: string,
 ): FullSceneDescription {
   const description = {
     ...makeQuote(card, quoteText, citationText),
@@ -33,7 +39,7 @@ export function makeQuoteScene(
   } as FullSceneDescription;
 
   description.onReplaced = new ValueDispatcher<FullSceneDescription>(
-    description.config as any
+    description.config as any,
   );
   return description;
 }
@@ -41,9 +47,10 @@ export function makeQuoteScene(
 export function makeQuote(
   card: string,
   quoteText: string,
-  citationText: TRichText[]
+  citationText: TRichText[],
 ) {
   return makeScene2D(function* (view) {
+    view.fill(0x101010);
     const squiggly = createRef<SquigglyBorder>();
     const text = createRef<Img>();
     const marks = createRefArray<Img>();
@@ -100,7 +107,8 @@ export function makeQuote(
                   },
                 ],
               })
-            }>
+            }
+          >
             <Img
               compositeOperation="source-in"
               ref={text}
@@ -119,11 +127,12 @@ export function makeQuote(
             fontFamily="mononoki"
             fontSize={32}
             textWrap={true}
-            maxWidth={876}>
+            maxWidth={876}
+          >
             {generateTxt(citationText)}
           </Txt>
         </Rect>
-      </Rect>
+      </Rect>,
     );
 
     squiggly().opacity(0);
@@ -143,6 +152,14 @@ export function makeQuote(
     text().opacity(0.01);
     text().margin([400, 0, 0, 0]);
 
+    let loopSquiggly = true;
+
+    yield run(function* () {
+      while (loopSquiggly) {
+        yield* squiggly().wiggle();
+      }
+    });
+
     yield* all(
       squiggly().opacity(1, 0.5),
       squiggly().scale(1, 0.5),
@@ -151,7 +168,9 @@ export function makeQuote(
       citation().opacity(1, 0.5),
       citation().margin(0, 0.5),
       text().opacity(1, 0.5),
-      text().margin([-1920, 0, 0, 0], 150, linear)
+      text().margin([-1920, 0, 0, 0], 150, linear),
     );
+
+    loopSquiggly = false;
   });
 }

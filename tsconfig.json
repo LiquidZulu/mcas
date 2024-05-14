@@ -16,6 +16,9 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@motion-canvas/2d/lib",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "paths": {
+      "@components/*": ["./lib/*"]
+    },
     "outDir": "dist"
   },
   "include": ["lib/**/*.ts", "lib/**/*.tsx", "test/**/*.ts", "test/**/*.tsx"]

@@ -23,7 +23,7 @@ export class SquigglyBorder extends Line {
   @signal()
   public declare readonly lineWidth: SimpleSignal<number, this>;
 
-  @initial(new Color('white'))
+  @initial(0xffffff)
   @signal()
   public declare readonly stroke: CanvasStyleSignal<this>;
 
@@ -63,7 +63,7 @@ export class SquigglyBorder extends Line {
         bottomLeft: [-18, -17],
         bottomRight: [-4, 15],
       },
-    ])
+    ]),
   )
   @signal()
   public declare readonly offsetsList: SimpleSignal<TCorners[], this>;
@@ -79,7 +79,7 @@ export class SquigglyBorder extends Line {
     });
 
     this.points(
-      this.getThePoints(this.currentOffset() % this.offsetsList().length)
+      this.getThePoints(this.currentOffset() % this.offsetsList().length),
     );
 
     // make the border appear above its children
@@ -137,7 +137,7 @@ export class SquigglyBorder extends Line {
     this.currentOffset((this.currentOffset() + 1) % this.offsetsList().length);
     yield* this.points(
       this.getThePoints(this.currentOffset()),
-      duration ?? this.duration()
+      duration ?? this.duration(),
     );
   }
 }
