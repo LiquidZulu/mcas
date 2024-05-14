@@ -26,17 +26,20 @@ import {
 
 import { SquigglyBorder, TRichText, generateTxt } from '../';
 import mark from '../assets/quote-assets/quote-marks.png';
+import { resolve } from 'path';
 
 export function makeQuoteScene(
   card: string,
-  quoteText: string,
+  quoteText: { image: string; height: number; width: number },
   citationText: TRichText[],
   name: string,
 ): FullSceneDescription {
-  const description = {
-    ...makeQuote(card, quoteText, citationText),
-    name,
-  } as FullSceneDescription;
+  const description = makeQuote(
+    card,
+    quoteText,
+    citationText,
+  ) as FullSceneDescription;
+  description.name = name;
 
   description.onReplaced = new ValueDispatcher<FullSceneDescription>(
     description.config as any,
@@ -46,7 +49,7 @@ export function makeQuoteScene(
 
 export function makeQuote(
   card: string,
-  quoteText: string,
+  quoteText: { image: string; height: number; width: number },
   citationText: TRichText[],
 ) {
   return makeScene2D(function* (view) {
@@ -114,9 +117,9 @@ export function makeQuote(
             <Img
               compositeOperation="source-in"
               ref={text}
-              src={quoteText}
-              width="100%"
-              height={1920}
+              src={quoteText.image}
+              width={876}
+              height={quoteText.height * (876 / quoteText.width)}
             />
           </Rect>
           <Rect alignItems="center" gap={16}>
@@ -170,7 +173,21 @@ export function makeQuote(
       citation().opacity(1, 0.5),
       citation().margin(0, 0.5),
       text().opacity(1, 0.5),
-      text().margin([-1920, 0, 0, 0], 150, linear),
+      text().margin(
+        [-text().height() + 100, 0, 0, 0],
+        text().height() / 17,
+        linear,
+      ),
+    );
+
+    yield* all(
+      squiggly().opacity(0, 0.5),
+      squiggly().scale(0.8, 0.5),
+      ...marks.map(m => all(m.opacity(0, 0.5), m.scale(0.8, 0.5))),
+      ...rays.map(r => r.start(1, 0.5)),
+      citation().opacity(0, 0.5),
+      citation().margin([50, 0, 50, 0], 0.5),
+      text().opacity(0, 0.5),
     );
 
     loopSquiggly = false;

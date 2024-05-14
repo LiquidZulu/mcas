@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { basename, resolve } from 'path';
 import { readFile, mkdir, writeFile } from 'fs/promises';
 import { getOrgQuotes, orgRichText, richTextToPango } from './util/org';
+import imageSize from 'image-size';
 
 /* eslint-disable */
 const version = require('../../package.json').version;
@@ -41,25 +42,27 @@ cli
       for (let i = 0; i < quotes.length; ++i) {
         const rich = orgRichText(quotes[i]);
         const pango = richTextToPango(rich);
+        const fileName = `${outDir}/quote-${i}.png`;
 
         const { stderr, stdout } = await require('exec-sh').promise(
-          'magick -background transparent -fill "white" -font Oswald -pointsize 32 -gravity Center -size 1080 -define pango:justify=true' +
+          `magick -background transparent -fill "white" -font Oswald -pointsize 32 -gravity Center -size 1080 -define pango:justify=true` +
             ` "pango:${pango}"` +
-            ` ${outDir}/quote-${i}.png`,
+            ` ${fileName}`,
         );
 
         if (!!stderr) throw new Error(stderr);
 
         console.log(stdout);
 
+        const { height, width } = imageSize(fileName);
+
         quoteImports += `import { default as quote${i} } from './quote-${i}.png';\n`;
-        defaultExport += `\n\tquote${i},`;
+        defaultExport += `\n\t{ image: quote${i}, width: ${width}, height: ${height} },`;
       }
 
       console.log(`Quotes for ${basename(file)} in ${resolve(outDir)}`);
 
       defaultExport += `\n];`;
-      //console.log(resolve(outDir, 'index.ts'));
       await writeFile(
         resolve(outDir, 'index.ts'),
         quoteImports + '\n\n' + defaultExport,
@@ -68,15 +71,3 @@ cli
   });
 
 cli.parseAsync(process.argv);
-
-/*
-magick \
-  -background transparent \
-  -fill "white" \
-  -font Oswald \
-  -pointsize 32 \
-  -gravity Center \
-  -size 1080 \
-  "pango:There is <b>bold</b> <i>itallic</i> and <b><i>both</i></b>" \
-  test.png
- */
