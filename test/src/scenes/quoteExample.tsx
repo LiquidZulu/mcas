@@ -1,11 +1,18 @@
 import aristotle from '../../../lib/assets/quote-assets/cards/aristotle.png';
-import lipsum from '../../../lib/assets/quote-assets/text/lorem-ipsum.png';
+import quotes from '../../../lib/assets/quote-assets/text';
 import { makeQuoteScene } from '../../../lib/scenes/quote';
 import { i } from '../../../lib/util';
 
-export const aristotleQuote = makeQuoteScene(
+export const quote0 = makeQuoteScene(
   aristotle,
-  lipsum,
+  quotes[0],
+  ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
+  'quote-aristotle',
+);
+
+export const quote1 = makeQuoteScene(
+  aristotle,
+  quotes[1],
   ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
   'quote-aristotle',
 );
