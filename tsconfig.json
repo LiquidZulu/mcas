@@ -1,4 +1,22 @@
 {
-  "extends": "@motion-canvas/2d/tsconfig.project.json",
-  "include": ["src"]
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@motion-canvas/2d/lib",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "outDir": "dist"
+  },
+  "include": ["lib/**/*.ts", "lib/**/*.tsx", "test/**/*.ts", "test/**/*.tsx"]
 }

@@ -24,7 +24,7 @@ import mark from '../assets/quote-assets/quote-marks.png';
 export function makeQuoteScene(
   card: string,
   quoteText: string,
-  citationText: TRichText,
+  citationText: TRichText[],
   name: string
 ): FullSceneDescription {
   const description = {
@@ -41,7 +41,7 @@ export function makeQuoteScene(
 export function makeQuote(
   card: string,
   quoteText: string,
-  citationText: TRichText
+  citationText: TRichText[]
 ) {
   return makeScene2D(function* (view) {
     const squiggly = createRef<SquigglyBorder>();
