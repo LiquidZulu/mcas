@@ -59,11 +59,13 @@ export function makeQuote(
 
     view.add(
       <Rect layout gap={128}>
-        <SquigglyBorder ref={squiggly}>
-          <Rect layout={false} cache width={512} height={680} fill="white">
-            <Img src={card} height={680} compositeOperation="source-in" />
-          </Rect>
-        </SquigglyBorder>
+        <Rect width={512} height={680}>
+          <SquigglyBorder ref={squiggly}>
+            <Rect layout={false} cache width={512} height={680} fill="white">
+              <Img src={card} height={680} compositeOperation="source-in" />
+            </Rect>
+          </SquigglyBorder>
+        </Rect>
         <Rect direction="column" gap={32}>
           <Rect alignItems="center" gap={16}>
             <Img ref={marks} height={40} src={mark} />

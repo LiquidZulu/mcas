@@ -82,6 +82,10 @@ export class SquigglyBorder extends Line {
       this.getThePoints(this.currentOffset() % this.offsetsList().length),
     );
 
+    // make sure it doesn't move about
+    // @ts-ignore
+    this.position = { x: () => 0, y: () => 0, context: this.position.context };
+
     // make the border appear above its children
     for (let child of this.children()) {
       child.compositeOperation('destination-over');
