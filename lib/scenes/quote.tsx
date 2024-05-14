@@ -53,7 +53,6 @@ export function makeQuote(
   citationText: TRichText[],
 ) {
   return makeScene2D(function* (view) {
-    view.fill(0x101010);
     const squiggly = createRef<SquigglyBorder>();
     const text = createRef<Img>();
     const marks = createRefArray<Img>();
