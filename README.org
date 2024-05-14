@@ -6,4 +6,4 @@ Motion Canvas Asset Set provides motion canvas assets that are frequently used o
 #+toc: headlines 2
 
 * Usage
-Documentation is provided in the [[https://github.com/LiquidZulu/mcas/tree/main/src][src]] directory.
+Documentation is provided in the [[https://github.com/LiquidZulu/mcas/tree/main/lib][lib]] directory.

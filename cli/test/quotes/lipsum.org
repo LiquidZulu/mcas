@@ -1,0 +1,11 @@
+#+title: Lipsum
+
+This is an example .org file which can have quotes pulled out using =mcas=.
+
+#+begin_quote
+In publishing and graphic design, */Lorem ipsum/* (\/ˌlɔː.rəm ˈɪp.səm\/) is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. /Lorem ipsum/ may be used as a placeholder before the final copy is available. It is also used to temporarily replace text in a process called greeking, which allows designers to consider the form of a webpage or publication, without the meaning of the text influencing the design.
+#+end_quote
+
+#+begin_quote
+*Rerum* /et/ ipsa illum nihil deleniti. Ut omnis labore repellendus distinctio aliquam. Nihil et quos et quos omnis eos rerum. Est laudantium illum vero ullam aut. Et cum sed omnis voluptatem debitis aut et eligendi. Ipsa dolore sequi omnis autem nesciunt labore. Nulla dignissimos magni molestias nisi. Optio quasi excepturi dolorum accusantium exercitationem eius minima maiores. Sed sequi explicabo cumque. Fugiat accusantium rem quasi. Explicabo optio culpa nemo praesentium est sequi eum. Odit optio velit non qui ut numquam repellat quo. Amet error unde commodi cum esse possimus. Voluptatem qui totam laboriosam reprehenderit nobis facilis. Deleniti debitis perspiciatis alias. Facilis rerum ut consequatur quas iure est. Nostrum eos blanditiis dolorem modi. Et eveniet dolor tenetur excepturi. Quos et delectus quisquam dolores impedit ut voluptatum in. Fugiat ut laborum aut odio. Tempore nobis nam iusto eaque voluptas fugiat nesciunt.
+#+end_quote

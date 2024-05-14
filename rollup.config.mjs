@@ -12,7 +12,10 @@ const config = [
       file: 'cli/dist/index.cjs',
       format: 'cjs',
     },
-    plugins: [typescript(), terser()],
+    plugins: [
+      typescript(),
+      //terser()
+    ],
   },
   {
     input: 'lib/index.ts',
