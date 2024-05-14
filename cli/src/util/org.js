@@ -59,3 +59,18 @@ export const orgRichText = pipe(
   orgApplyEffect(orgItallic),
   filterBlankText,
 );
+
+export function richTextToPango(richText) {
+  let pango = '';
+
+  for (let chunk of richText) {
+    pango += `${chunk.effects.map(x => `<${x}>`).join('')}${
+      chunk.text
+    }${chunk.effects
+      .reverse()
+      .map(x => `</${x}>`)
+      .join('')}`;
+  }
+
+  return pango;
+}

@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { basename, resolve } from 'path';
-import { readFile, mkdir } from 'fs/promises';
-import { getOrgQuotes, orgRichText } from './util/org';
+import { readFile, mkdir, writeFile } from 'fs/promises';
+import { getOrgQuotes, orgRichText, richTextToPango } from './util/org';
 
 /* eslint-disable */
 const version = require('../../package.json').version;
@@ -21,21 +21,6 @@ Examples:
   )
   .showHelpAfterError();
 
-function richTextToPango(richText) {
-  let pango = '';
-
-  for (let chunk of richText) {
-    pango += `${chunk.effects.map(x => `<${x}>`).join('')}${
-      chunk.text
-    }${chunk.effects
-      .reverse()
-      .map(x => `</${x}>`)
-      .join('')}`;
-  }
-
-  return pango;
-}
-
 cli
   .argument(
     '[filenames...]',
@@ -50,7 +35,8 @@ cli
 
       await mkdir(outDir, { recursive: true });
 
-      mkdir;
+      let quoteImports = '';
+      let defaultExport = 'export default [';
 
       for (let i = 0; i < quotes.length; ++i) {
         const rich = orgRichText(quotes[i]);
@@ -65,9 +51,19 @@ cli
         if (!!stderr) throw new Error(stderr);
 
         console.log(stdout);
+
+        quoteImports += `import { default as quote${i} } from './quote-${i}.png';\n`;
+        defaultExport += `\n\tquote${i},`;
       }
 
       console.log(`Quotes for ${basename(file)} in ${resolve(outDir)}`);
+
+      defaultExport += `\n];`;
+      //console.log(resolve(outDir, 'index.ts'));
+      await writeFile(
+        resolve(outDir, 'index.ts'),
+        quoteImports + '\n\n' + defaultExport,
+      );
     }
   });
 
