@@ -3,16 +3,17 @@ import dts from 'rollup-plugin-dts';
 import externals from 'rollup-plugin-node-externals';
 import terser from '@rollup/plugin-terser';
 import image from '@rollup/plugin-image';
+import json from '@rollup/plugin-json';
 
 /** @type {import('rollup').RollupOptions} */
 const config = [
   {
     input: 'cli/src/index.ts',
     output: {
-      file: 'cli/dist/index.cjs',
-      format: 'cjs',
+      file: 'cli/dist/index.mjs',
+      format: 'es',
     },
-    plugins: [typescript(), terser()],
+    plugins: [typescript(), terser(), json()],
   },
   {
     input: 'lib/index.ts',

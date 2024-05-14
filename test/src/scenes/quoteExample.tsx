@@ -7,12 +7,12 @@ export const quote0 = makeQuoteScene(
   aristotle,
   quotes[0],
   ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
-  'quote-aristotle',
+  'quote-0',
 );
 
 export const quote1 = makeQuoteScene(
   aristotle,
   quotes[1],
   ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
-  'quote-aristotle',
+  'quote-1',
 );

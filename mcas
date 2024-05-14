@@ -6,4 +6,4 @@ for i in "$@"; do
     arguments="$arguments $i"
 done
 
-dirname $0 | xargs printf "%s/cli/dist/index.cjs" | xargs printf "%s$arguments" | xargs node
+dirname $0 | xargs printf "%s/cli/dist/index.mjs" | xargs printf "%s$arguments" | xargs node
