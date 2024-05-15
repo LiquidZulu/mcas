@@ -7,40 +7,40 @@ import json from '@rollup/plugin-json';
 
 /** @type {import('rollup').RollupOptions} */
 const config = [
-  {
-    input: 'cli/src/index.ts',
-    output: {
-      file: 'cli/dist/index.mjs',
-      format: 'es',
+    {
+        input: 'cli/src/index.ts',
+        output: {
+            file: 'cli/dist/index.mjs',
+            format: 'es',
+        },
+        plugins: [typescript(), json()],
     },
-    plugins: [typescript(), json()],
-  },
-  {
-    input: 'lib/index.ts',
-    output: {
-      file: 'dist/index.min.js',
-      format: 'es',
+    {
+        input: 'lib/index.ts',
+        output: {
+            file: 'dist/index.min.js',
+            format: 'es',
+        },
+        plugins: [externals(), typescript(), terser(), image()],
+        external: [/^@motion-canvas\/core/, /^@motion-canvas\/2d/],
     },
-    plugins: [externals(), typescript(), terser(), image()],
-    external: [/^@motion-canvas\/core/, /^@motion-canvas\/2d/],
-  },
-  {
-    input: 'lib/index.ts',
-    output: {
-      file: 'dist/index.js',
-      format: 'es',
+    {
+        input: 'lib/index.ts',
+        output: {
+            file: 'dist/index.js',
+            format: 'es',
+        },
+        plugins: [externals(), typescript(), image()],
+        external: [/^@motion-canvas\/core/, /^@motion-canvas\/2d/],
     },
-    plugins: [externals(), typescript(), image()],
-    external: [/^@motion-canvas\/core/, /^@motion-canvas\/2d/],
-  },
-  {
-    input: 'lib/index.ts',
-    output: {
-      file: 'dist/index.d.ts',
-      format: 'es',
+    {
+        input: 'lib/index.ts',
+        output: {
+            file: 'dist/index.d.ts',
+            format: 'es',
+        },
+        plugins: [dts(), image()],
     },
-    plugins: [dts(), image()],
-  },
 ];
 
 export default config;

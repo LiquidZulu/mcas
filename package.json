@@ -1,75 +1,75 @@
 {
-  "name": "mcas",
-  "private": false,
-  "version": "0.0.0",
-  "homepage": "https://github.com/LiquidZulu/mcas",
-  "keywords": [
-    "motion canvas"
-  ],
-  "bugs": {
-    "url": "https://github.com/LiquidZulu/mcas",
-    "email": "liquidzulu+mcas@pm.me"
-  },
-  "author": "LiquidZulu <liquidzulu@pm.me> (https://liquidzulu.github.io)",
-  "funding": {
-    "type": "individual",
-    "url": "https://ko-fi.com/liquidzulu"
-  },
-  "unpkg": "dist/bundle.js",
-  "main": "dist/index.min.mjs",
-  "types": "dist/index.d.ts",
-  "license": "Unlicense",
-  "scripts": {
-    "prepare": "husky install",
-    "build:dev": "rollup -c rollup.config.mjs",
-    "watch": "rollup -c rollup.config.mjs -w",
-    "build": "rollup -c rollup.config.mjs",
-    "prebuild": "rimraf ./dist && rimraf ./cli/dist",
-    "lint-staged": "lint-staged",
-    "lint": "npm run eslint && npm run prettier",
-    "format": "npm run eslint:fix && npm run prettier:fix",
-    "eslint": "eslint \"**/*.ts?(x)\"",
-    "eslint:fix": "eslint --fix \"**/*.ts?(x)\"",
-    "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write .",
-    "serve": "vite"
-  },
-  "peerDependencies": {
-    "@motion-canvas/2d": "^3.15.2",
-    "@motion-canvas/core": "^3.15.2"
-  },
-  "dependencies": {
-    "commander": "^12.0.0",
-    "exec-sh": "^0.4.0",
-    "image-size": "^1.1.1"
-  },
-  "devDependencies": {
-    "@motion-canvas/ui": "^3.15.2",
-    "@motion-canvas/vite-plugin": "^3.15.1",
-    "@rollup/plugin-image": "^3.0.3",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.6",
-    "@types/node": "^20.12.12",
-    "@typescript-eslint/eslint-plugin": "^7.9.0",
-    "@typescript-eslint/parser": "^7.9.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.57.0",
-    "eslint-plugin-tsdoc": "^0.2.17",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5",
-    "rimraf": "^5.0.7",
-    "rollup": "^4.17.2",
-    "rollup-plugin-dts": "^6.1.0",
-    "rollup-plugin-node-externals": "^7.1.2",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.11",
-    "vite-tsconfig-paths": "^4.3.2"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": "eslint --fix",
-    "*.{js,jsx,ts,tsx,md,scss,json,mjs}": "prettier --write"
-  }
+    "name": "mcas",
+    "private": false,
+    "version": "0.0.0",
+    "homepage": "https://github.com/LiquidZulu/mcas",
+    "keywords": [
+        "motion canvas"
+    ],
+    "bugs": {
+        "url": "https://github.com/LiquidZulu/mcas",
+        "email": "liquidzulu+mcas@pm.me"
+    },
+    "author": "LiquidZulu <liquidzulu@pm.me> (https://liquidzulu.github.io)",
+    "funding": {
+        "type": "individual",
+        "url": "https://ko-fi.com/liquidzulu"
+    },
+    "unpkg": "dist/bundle.js",
+    "main": "dist/index.min.mjs",
+    "types": "dist/index.d.ts",
+    "license": "Unlicense",
+    "scripts": {
+        "prepare": "husky install",
+        "build:dev": "rollup -c rollup.config.mjs",
+        "watch": "rollup -c rollup.config.mjs -w",
+        "build": "rollup -c rollup.config.mjs",
+        "prebuild": "rimraf ./dist && rimraf ./cli/dist",
+        "lint-staged": "lint-staged",
+        "lint": "npm run eslint && npm run prettier",
+        "format": "npm run eslint:fix && npm run prettier:fix",
+        "eslint": "eslint \"**/*.ts?(x)\"",
+        "eslint:fix": "eslint --fix \"**/*.ts?(x)\"",
+        "prettier": "prettier --check .",
+        "prettier:fix": "prettier --write .",
+        "serve": "vite"
+    },
+    "peerDependencies": {
+        "@motion-canvas/2d": "^3.15.2",
+        "@motion-canvas/core": "^3.15.2"
+    },
+    "dependencies": {
+        "commander": "^12.0.0",
+        "exec-sh": "^0.4.0",
+        "image-size": "^1.1.1"
+    },
+    "devDependencies": {
+        "@motion-canvas/ui": "^3.15.2",
+        "@motion-canvas/vite-plugin": "^3.15.1",
+        "@rollup/plugin-image": "^3.0.3",
+        "@rollup/plugin-json": "^6.1.0",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-typescript": "^11.1.6",
+        "@types/node": "^20.12.12",
+        "@typescript-eslint/eslint-plugin": "^7.9.0",
+        "@typescript-eslint/parser": "^7.9.0",
+        "cross-env": "^7.0.3",
+        "eslint": "^8.57.0",
+        "eslint-plugin-tsdoc": "^0.2.17",
+        "husky": "^9.0.11",
+        "lint-staged": "^15.2.2",
+        "prettier": "^3.2.5",
+        "rimraf": "^5.0.7",
+        "rollup": "^4.17.2",
+        "rollup-plugin-dts": "^6.1.0",
+        "rollup-plugin-node-externals": "^7.1.2",
+        "tslib": "^2.6.2",
+        "typescript": "^5.2.2",
+        "vite": "^5.2.11",
+        "vite-tsconfig-paths": "^4.3.2"
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": "eslint --fix",
+        "*.{js,jsx,ts,tsx,md,scss,json,mjs}": "prettier --write"
+    }
 }
