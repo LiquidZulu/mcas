@@ -1,18 +1,75 @@
 import { pipe, Fn } from './pipe';
+import { TRichText } from '@internal/lib/types';
+import { b, i, bi } from '@internal/lib/util/richTextUtils';
 
 type TOrgRichTextAtom = { effects: string[]; text: string };
 type TOrgRichText = TOrgRichTextAtom[];
 
+export function getOrgFootRefs(text: string): Map<string, TRichText[]> {
+    const map = new Map();
+
+    for (const raw of text.matchAll(/^\[fn:\d+].*/gm)) {
+        const fn = raw[0].match(/\[fn:\d+]/g)[0];
+        const citationRichText: TRichText[] = orgRichText(
+            raw[0].slice(fn.length),
+        ).map(x => {
+            if (x.effects.includes('b') && x.effects.includes('i')) {
+                return bi(x.text);
+            }
+
+            if (x.effects.includes('b')) {
+                return b(x.text);
+            }
+
+            if (x.effects.includes('i')) {
+                return i(x.text);
+            }
+
+            return x.text;
+        });
+
+        map.set(fn, citationRichText);
+    }
+
+    return map;
+}
+
+export function getFootnoteFromOrg(
+    text: string,
+    quote: string,
+): [string, TRichText[]] {
+    const fn = quote.match(/\[fn:\d+]/g)[0];
+    const slicedQuote = quote.slice(0, -fn.length);
+    const footrefs = getOrgFootRefs(text);
+    return [slicedQuote, footrefs.get(fn)];
+}
+
+export function orgQuoteFootnoteHandler(
+    text: string,
+    quote: string,
+): Array<[string, TRichText[]]> {
+    const quotes = [];
+    for (const q of quote.matchAll(/(.|\n)*?\[fn:\d+]/g)) {
+        quotes.push(getFootnoteFromOrg(text, q[0].trim()));
+    }
+    return quotes;
+}
+
 export function getOrgQuotes(text: string) {
-    const rawQuotes = [];
+    const quotes = [];
 
     for (const quote of text.matchAll(
         /#\+begin_quote\n((.|\n)+?)#\+end_quote/g,
     )) {
-        rawQuotes.push(quote[0]);
+        quotes.push(
+            ...orgQuoteFootnoteHandler(
+                text,
+                quote[0].split('\n').slice(1, -1).join('\n'),
+            ),
+        );
     }
 
-    return rawQuotes.map(x => x.split('\n').slice(1, -1).join('\n'));
+    return quotes;
 }
 
 const orgEffect = (char: string, name: string) => (text: string) => {

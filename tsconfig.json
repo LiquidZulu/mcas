@@ -17,7 +17,7 @@
         "jsxImportSource": "@motion-canvas/2d/lib",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "paths": {
-            "@components/*": ["./lib/*"]
+            "@internal/*": ["./*"]
         },
         "outDir": "dist"
     },

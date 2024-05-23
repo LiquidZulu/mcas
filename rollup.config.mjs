@@ -13,7 +13,7 @@ const config = [
             file: 'cli/dist/index.mjs',
             format: 'es',
         },
-        plugins: [typescript(), json()],
+        plugins: [typescript(), json(), image()],
     },
     {
         input: 'lib/index.ts',
