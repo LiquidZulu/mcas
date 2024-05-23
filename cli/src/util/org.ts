@@ -1,4 +1,4 @@
-import { pipe } from './pipe';
+import { pipe, Fn } from './pipe';
 
 type TOrgRichTextAtom = { effects: string[]; text: string };
 type TOrgRichText = TOrgRichTextAtom[];
@@ -61,7 +61,7 @@ const filterBlankText = (procText: TOrgRichText) =>
 
 export const orgBold = orgEffect('*', 'b');
 export const orgItallic = orgEffect('/', 'i');
-export const orgRichText = pipe(
+export const orgRichText: Fn<string, TOrgRichText> = pipe(
     orgBold,
     orgApplyEffect(orgItallic),
     filterBlankText,

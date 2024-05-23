@@ -1,8 +1,8 @@
-type Fn<T, U> = (arg: T) => U;
+export type Fn<T, U> = (arg: T) => U;
 
 /* tslint:disable:max-line-length */
 /* prettier-ignore */
-type PipeFns<A, B, C, D, E, F, G, H, I, J> =
+export type PipeFns<A, B, C, D, E, F, G, H, I, J> =
   | [Fn<A,B>]
   | [Fn<A,B>, Fn<B,C>]
   | [Fn<A,B>, Fn<B,C>, Fn<C,D>]
@@ -22,4 +22,4 @@ export const pipe =
         ...fns: PipeFns<A, B, C, D, E, F, G, H, I, J>
     ) =>
     (x: A) =>
-        fns.reduce((v: any, f: Fn<any, any>) => f(v), x as any);
+        fns.reduce((v: any, f: Fn<any, any>) => f(v), x as any) as any;
