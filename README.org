@@ -5,7 +5,7 @@ Motion Canvas Asset Set provides motion canvas assets that are frequently used o
 #+toc: headlines 2
 
 * Installation
-MCAS is available as [[https://www.npmjs.com/package/mcas][an npm package]], and [[https://github.com/LiquidZulu/mcas][on GitHub]]. For either method, if you want to use the cli you will have to add the location you downloaded mcas to to your [[https://en.wikipedia.org/wiki/PATH_(variable)][PATH]], which allows you to run the cli using the =mcas= script.
+MCAS is available as [[https://www.npmjs.com/package/mcas][an npm package]], and [[https://github.com/LiquidZulu/mcas][on GitHub]]. For either method, if you want to use the cli you will have to add the location you downloaded MCAS to to your [[https://en.wikipedia.org/wiki/PATH_(variable)][PATH]], which allows you to run the cli using the =mcas= script.
 
 If you want to have MCAS installed as a local git repo, it is going to be helpful to make an alias to it in your tsconfig:
 #+begin_src json

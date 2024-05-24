@@ -3,17 +3,17 @@ Motion Canvas Asset Set provides motion canvas assets that are frequently used o
 
 # Table of Contents
 
-1.  [Installation](#org61c9b7e)
-2.  [Usage](#org6c5545e)
-    1.  [Documentation](#org60967f2)
-    2.  [Examples](#org76b560f)
+1.  [Installation](#org8ffc430)
+2.  [Usage](#org0c3660b)
+    1.  [Documentation](#orga5c7d66)
+    2.  [Examples](#org4b8d3fa)
 
 
-<a id="org61c9b7e"></a>
+<a id="org8ffc430"></a>
 
 # Installation
 
-MCAS is available as [an npm package](https://www.npmjs.com/package/mcas), and [on GitHub](https://github.com/LiquidZulu/mcas). For either method, if you want to use the cli you will have to add the location you downloaded mcas to to your [PATH](https://en.wikipedia.org/wiki/PATH_(variable)), which allows you to run the cli using the `mcas` script.
+MCAS is available as [an npm package](https://www.npmjs.com/package/mcas), and [on GitHub](https://github.com/LiquidZulu/mcas). For either method, if you want to use the cli you will have to add the location you downloaded MCAS to to your [PATH](https://en.wikipedia.org/wiki/PATH_(variable)), which allows you to run the cli using the `mcas` script.
 
 If you want to have MCAS installed as a local git repo, it is going to be helpful to make an alias to it in your tsconfig:
 
@@ -56,19 +56,19 @@ Which then allows you to reference MCAS in your project by doing:
     });
 
 
-<a id="org6c5545e"></a>
+<a id="org0c3660b"></a>
 
 # Usage
 
 
-<a id="org60967f2"></a>
+<a id="orga5c7d66"></a>
 
 ## Documentation
 
 Documentation is provided in the [lib](https://github.com/LiquidZulu/mcas/tree/main/lib) directory.
 
 
-<a id="org76b560f"></a>
+<a id="org4b8d3fa"></a>
 
 ## Examples
 
