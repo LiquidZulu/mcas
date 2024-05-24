@@ -12,4 +12,15 @@ import { colors, McasTxt as Txt, popin, popout } from 'mcas';
 
 export default makeScene2D(function* (view) {
     view.fill(colors.bg);
+
+    const glowingText = createRef<Txt>();
+    view.add(
+        <Txt glow fontFamily="Oswald" fill="red" ref={glowingText}>
+            HELLO WORLD
+        </Txt>,
+    );
+
+    yield* popin(glowingText);
+    yield* waitFor(5);
+    yield* popout(glowingText);
 });
