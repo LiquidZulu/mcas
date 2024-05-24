@@ -1,18 +1,30 @@
 import { pipe, Fn } from './pipe';
 import { TRichText } from '@internal/lib/types';
 import { b, i, bi } from '@internal/lib/util/richTextUtils';
+import slugify from 'slugify';
 
-type TOrgRichTextAtom = { effects: string[]; text: string };
-type TOrgRichText = TOrgRichTextAtom[];
+export type TOrgRichTextAtom = { effects: string[]; text: string };
+export type TOrgRichText = TOrgRichTextAtom[];
+export type TOrgQuote = {
+    text: string;
+    citation: TRichText[];
+    author: string;
+};
 
-export function getOrgFootRefs(text: string): Map<string, TRichText[]> {
+export function getOrgFootRefs(text: string): Map<
+    string,
+    {
+        citation: TRichText[];
+        author: string;
+    }
+> {
     const map = new Map();
 
     for (const raw of text.matchAll(/^\[fn:\d+].*/gm)) {
         const fn = raw[0].match(/\[fn:\d+]/g)[0];
-        const citationRichText: TRichText[] = orgRichText(
-            raw[0].slice(fn.length),
-        ).map(x => {
+        const sliced = raw[0].slice(fn.length);
+        const author = slugify(sliced.split(',')[0], { lower: true });
+        const citationRichText: TRichText[] = orgRichText(sliced).map(x => {
             if (x.effects.includes('b') && x.effects.includes('i')) {
                 return bi(x.text);
             }
@@ -28,26 +40,29 @@ export function getOrgFootRefs(text: string): Map<string, TRichText[]> {
             return x.text;
         });
 
-        map.set(fn, citationRichText);
+        map.set(fn, { citation: citationRichText, author } as {
+            citation: TRichText[];
+            author: string;
+        });
     }
 
     return map;
 }
 
-export function getFootnoteFromOrg(
-    text: string,
-    quote: string,
-): [string, TRichText[]] {
+export function getFootnoteFromOrg(text: string, quote: string): TOrgQuote {
     const fn = quote.match(/\[fn:\d+]/g)[0];
     const slicedQuote = quote.slice(0, -fn.length);
     const footrefs = getOrgFootRefs(text);
-    return [slicedQuote, footrefs.get(fn)];
+    return {
+        text: slicedQuote,
+        ...footrefs.get(fn),
+    };
 }
 
 export function orgQuoteFootnoteHandler(
     text: string,
     quote: string,
-): Array<[string, TRichText[]]> {
+): TOrgQuote[] {
     const quotes = [];
     for (const q of quote.matchAll(/(.|\n)*?\[fn:\d+]/g)) {
         quotes.push(getFootnoteFromOrg(text, q[0].trim()));
@@ -56,7 +71,7 @@ export function orgQuoteFootnoteHandler(
 }
 
 export function getOrgQuotes(text: string) {
-    const quotes = [];
+    const quotes: TOrgQuote[] = [];
 
     for (const quote of text.matchAll(
         /#\+begin_quote\n((.|\n)+?)#\+end_quote/g,

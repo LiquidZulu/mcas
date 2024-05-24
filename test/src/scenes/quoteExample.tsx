@@ -1,7 +1,7 @@
-import aristotle from '../../../lib/assets/quote-assets/cards/aristotle.png';
-import quotes from '../../../lib/assets/quote-assets/text';
-import { makeQuoteScene } from '../../../lib/scenes/quote';
-import { i } from '../../../lib/util';
+import aristotle from '@internal/lib/assets/quote-assets/cards/aristotle.png';
+import quotes from '@internal/lib/assets/quote-assets/text';
+import { makeQuoteScene } from '@internal/lib/scenes/quote';
+import { i } from '@internal/lib/util';
 
 export const quote0 = makeQuoteScene(
     aristotle,

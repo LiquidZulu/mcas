@@ -16,7 +16,7 @@ export async function handleQuotes(filenames: string[]) {
         let defaultExport = 'export default [';
 
         for (let i = 0; i < quotes.length; ++i) {
-            const rich = orgRichText(quotes[i][0]);
+            const rich = orgRichText(quotes[i].text);
             const pango = richTextToPango(rich);
             const fileName = `${outDir}/quote-${i}.png`;
 
@@ -34,8 +34,8 @@ export async function handleQuotes(filenames: string[]) {
 
             quoteImports += `import { default as quote${i} } from './quote-${i}.png';\n`;
             defaultExport += `\n\t{ image: quote${i}, width: ${width}, height: ${height}, citation: ${JSON.stringify(
-                quotes[i][1],
-            )} },`;
+                quotes[i].citation,
+            )}, author: "${quotes[i].author}" },`;
         }
 
         console.log(`Quotes for ${basename(file)} in ${resolve(outDir)}`);

@@ -41,7 +41,8 @@
     "dependencies": {
         "commander": "^12.1.0",
         "exec-sh": "^0.4.0",
-        "image-size": "^1.1.1"
+        "image-size": "^1.1.1",
+        "slugify": "^1.6.6"
     },
     "devDependencies": {
         "@motion-canvas/ui": "^3.16.0",
