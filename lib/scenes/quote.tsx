@@ -24,7 +24,7 @@ import {
     Gradient,
 } from '@motion-canvas/2d';
 
-import { SquigglyBorder, TRichText, generateTxt } from '../';
+import { SquigglyBorder, TRichText, colors, generateTxt } from '../';
 import mark from '../assets/quote-assets/quote-marks.png';
 import { resolve } from 'path';
 
@@ -53,7 +53,7 @@ export function makeQuote(
     citationText: TRichText[],
 ) {
     return makeScene2D(function* (view) {
-        view.fill(0x101010);
+        //view.fill(colors.bg);
         const squiggly = createRef<SquigglyBorder>();
         const text = createRef<Img>();
         const marks = createRefArray<Img>();
