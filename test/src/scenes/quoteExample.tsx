@@ -1,18 +1,27 @@
-import aristotle from '@internal/lib/assets/quote-assets/cards/aristotle.png';
-import quotes from '@internal/lib/assets/quote-assets/text';
+import aristotle from '@internal/test/assets/aristotle.png';
+import quotes from '@internal/test/assets/aristotle.org-quotes';
 import { makeQuoteScene } from '@internal/lib/scenes/quote';
-import { i } from '@internal/lib/util';
+//import { i } from '@internal/lib/util';
 
-export const quote0 = makeQuoteScene(
-    aristotle,
-    quotes[0],
-    ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
-    'quote-0',
+// if you want to have multiple possible authors, you need to add their pictures here.
+const cardMap = new Map([['aristotle', aristotle]]);
+
+export const quoteScenes = quotes.map((x, i) =>
+    makeQuoteScene(cardMap.get(x.author), x, x.citation, `quote-${i}`),
 );
 
-export const quote1 = makeQuoteScene(
-    aristotle,
-    quotes[1],
-    ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
-    'quote-1',
-);
+// you could alternatively manually reference what you want:
+//
+/* export const quote0 = makeQuoteScene(
+ *     aristotle,
+ *     quotes[0],
+ *     ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
+ *     'quote-0',
+ * );
+ *
+ * export const quote1 = makeQuoteScene(
+ *     aristotle,
+ *     quotes[1],
+ *     ['Aristotle, "Foo Bar Baz," in id., ', i('Lorem Ipsum'), ', pp. 69-420'],
+ *     'quote-1',
+ * ); */
