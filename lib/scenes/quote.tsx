@@ -1,6 +1,7 @@
 import {
     Color,
     FullSceneDescription,
+    PossibleColor,
     Thread,
     ThreadGenerator,
     ValueDispatcher,
@@ -33,11 +34,15 @@ export function makeQuoteScene(
     quoteText: { image: string; height: number; width: number },
     citationText: TRichText[],
     name: string,
+    config?: {
+        bg: boolean | PossibleColor;
+    },
 ): FullSceneDescription {
     const description = makeQuote(
         card,
         quoteText,
         citationText,
+        config,
     ) as FullSceneDescription;
     description.name = name;
 
@@ -51,9 +56,18 @@ export function makeQuote(
     card: string,
     quoteText: { image: string; height: number; width: number },
     citationText: TRichText[],
+    config: {
+        bg: boolean | PossibleColor;
+    },
 ) {
     return makeScene2D(function* (view) {
-        //view.fill(colors.bg);
+        if (!!config.bg) {
+            if (config.bg == true) {
+                view.fill(colors.bg);
+            } else {
+                view.fill(config.bg);
+            }
+        }
         const squiggly = createRef<SquigglyBorder>();
         const text = createRef<Img>();
         const marks = createRefArray<Img>();

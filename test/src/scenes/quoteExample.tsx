@@ -7,7 +7,9 @@ import { makeQuoteScene } from '@internal/lib/scenes/quote';
 const cardMap = new Map([['aristotle', aristotle]]);
 
 export const quoteScenes = quotes.map((x, i) =>
-    makeQuoteScene(cardMap.get(x.author), x, x.citation, `quote-${i}`),
+    makeQuoteScene(cardMap.get(x.author), x, x.citation, `quote-${i}`, {
+        bg: true,
+    }),
 );
 
 // you could alternatively manually reference what you want:

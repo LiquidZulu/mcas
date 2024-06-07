@@ -25,7 +25,7 @@
       "options": {
         "fileType": "image/png",
         "quality": 100,
-        "groupByScene": false
+        "groupByScene": true
       }
     }
   }
