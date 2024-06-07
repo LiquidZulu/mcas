@@ -8,7 +8,8 @@ Motion Canvas Asset Set provides motion canvas assets that are frequently used o
 MCAS is available as [[https://www.npmjs.com/package/mcas][an npm package]], and [[https://github.com/LiquidZulu/mcas][on GitHub]]. For either method, if you want to use the cli you will have to add the location you downloaded MCAS to to your [[https://en.wikipedia.org/wiki/PATH_(variable)][PATH]], which allows you to run the cli using the =mcas= script.
 
 If you want to have MCAS installed as a local git repo, it is going to be helpful to make an alias to it in your tsconfig:
-#+begin_src json
+#+begin_export md
+```json
 {
     "compilerOptions": {
         "paths": {
@@ -18,10 +19,12 @@ If you want to have MCAS installed as a local git repo, it is going to be helpfu
     },
     ...
 }
-#+end_src
+```
+#+end_export
 
 Which then allows you to reference MCAS in your project by doing:
-#+begin_src tsx
+#+begin_export md
+```tsx
 import { makeScene2D, Rect, Ray, Img } from '@motion-canvas/2d';
 import {
     all,
@@ -47,7 +50,8 @@ export default makeScene2D(function* (view) {
     yield* waitFor(5);
     yield* popout(glowingText);
 });
-#+end_src
+```
+#+end_export
 * Usage
 ** Documentation
 Documentation is provided in the [[https://github.com/LiquidZulu/mcas/tree/main/lib][lib]] directory.
@@ -61,7 +65,8 @@ mcas -q script.org
 #+end_src
 
 This will generate all of the relevant files in =./script.org-quotes=, including an =index.ts= ready to import into your animation. If you want to automatically generate a number of individual image sequences (this is recommended) from all of these quotes, then make a tsx file like:
-#+begin_src typescript
+#+begin_export md
+```ts
 import john from './assets/quote-cards/john.png';
 import sally from './assets/quote-cards/sally.png';
 import nathan from './assets/quote-cards/nathan.png';
@@ -85,10 +90,12 @@ export const quoteScenes = quotes.map((x, i) =>
         `quote-${i}`            // the name that motion-canvas will use to identify it
     )
 );
-#+end_src
+```
+#+end_export
 
 Then in the =project.ts= all of these scenes can be presented by doing:
-#+begin_src typescript
+#+begin_export md
+```ts
 import { makeProject } from '@motion-canvas/core';
 import { quoteScenes } from './scenes/quoteExample';
 
@@ -96,10 +103,12 @@ export default makeProject({
     experimentalFeatures: true,
     scenes: quoteScenes,
 });
-#+end_src
+```
+#+end_export
 
 If you want to also have other scenes rendering at the same time you can do:
-#+begin_src typescript
+#+begin_export md
+```ts
 import { makeProject } from '@motion-canvas/core';
 import { quoteScenes } from './scenes/quoteExample';
 import someOtherScene from './scenes/someOtherScene?scene';
@@ -111,4 +120,5 @@ export default makeProject({
         someOtherScene
     ],
 });
-#+end_src
+```
+#+end_export
