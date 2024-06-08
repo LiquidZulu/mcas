@@ -1,7 +1,7 @@
 {
     "name": "mcas",
     "private": false,
-    "version": "0.0.0",
+    "version": "0.0.1",
     "homepage": "https://github.com/LiquidZulu/mcas",
     "keywords": [
         "motion canvas"
@@ -16,7 +16,7 @@
         "url": "https://ko-fi.com/liquidzulu"
     },
     "unpkg": "dist/bundle.js",
-    "main": "dist/index.min.mjs",
+    "main": "lib/index.ts",
     "types": "dist/index.d.ts",
     "license": "Unlicense",
     "scripts": {
