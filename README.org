@@ -54,7 +54,7 @@ export default makeScene2D(function* (view) {
 #+end_export
 * Usage
 ** Documentation
-Documentation is provided in the [[https://github.com/LiquidZulu/mcas/tree/main/lib][lib]] directory.
+[[https://liquidzulu.github.io/mcas]]
 ** Examples
 *** Generating Quote Scenes
 The MCAS cli allows for the generation of quotes from provided [[https://orgmode.org/][orgmode]] documents. An example of this can be seen in [[https://github.com/LiquidZulu/mcas/blob/main/test/src/scenes/quoteExample.tsx][test/src/scenes/quoteExample.tsx]].

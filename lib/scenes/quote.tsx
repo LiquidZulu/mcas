@@ -27,7 +27,7 @@ import {
 
 import { SquigglyBorder, TRichText, colors, generateTxt } from '../';
 import mark from '../assets/quote-assets/quote-marks.png';
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 
 export function makeQuoteScene(
     card: string,
