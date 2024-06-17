@@ -16,8 +16,10 @@
         "jsx": "react-jsx",
         "jsxImportSource": "@motion-canvas/2d/lib",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "baseUrl": ".",
         "paths": {
-            "@internal/*": ["./*"]
+            "@internal/*": ["./*"],
+            "@lib/*": ["./lib/*"]
         },
         "outDir": "dist"
     },
