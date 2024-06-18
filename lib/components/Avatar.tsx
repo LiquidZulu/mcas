@@ -2,7 +2,6 @@ import {
     Node,
     NodeProps,
     Rect,
-    RectProps,
     Img,
     ImgProps,
     initial,
