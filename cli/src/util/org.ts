@@ -151,5 +151,5 @@ export function richTextToPango(richText: TOrgRichText) {
             .join('')}`;
     }
 
-    return pango;
+    return pango.replaceAll('"', '\\"');
 }
