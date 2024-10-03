@@ -1,6 +1,11 @@
 import { basename, resolve } from 'path';
 import { readFile, mkdir, writeFile } from 'fs/promises';
-import { getOrgQuotes, orgRichText, richTextToPango } from '../util/org';
+import {
+    getOrgQuotes,
+    orgRichText,
+    richTextToPango,
+    pangoGreyParentheticals,
+} from '../util/org';
 import exec from 'exec-sh';
 import imageSize from 'image-size';
 
@@ -17,10 +22,12 @@ export async function handleQuotes(filenames: string[]) {
 
         for (let i = 0; i < quotes.length; ++i) {
             const rich = orgRichText(quotes[i].text);
-            const pango = richTextToPango(rich);
+            const pango = richTextToPango(rich, [
+                pangoGreyParentheticals([/\[[^\]]+\]/g]),
+            ]);
             const fileName = `${outDir}/quote-${i}.png`;
 
-            const { stderr, stdout } = await exec.promise(
+            const { stderr } = await exec.promise(
                 `magick -background transparent -fill "white" -font Oswald -pointsize 32 -gravity Center -size 1080 -define pango:justify=true` +
                     ` "pango:${pango}"` +
                     ` ${fileName}`,
@@ -28,7 +35,7 @@ export async function handleQuotes(filenames: string[]) {
 
             if (stderr) throw new Error(stderr);
 
-            console.log(stdout);
+            console.log(pango);
 
             const { height, width } = imageSize(fileName);
 

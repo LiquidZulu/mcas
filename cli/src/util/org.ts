@@ -1,4 +1,5 @@
 import { pipe, Fn } from './pipe';
+import { regexReplace } from './regexReplace';
 import { TRichText } from '@internal/lib/types';
 import { b, i, bi } from '@internal/lib/util/richTextUtils';
 import slugify from 'slugify';
@@ -139,7 +140,23 @@ export const orgRichText: Fn<string, TOrgRichText> = pipe(
     filterBlankText,
 );
 
-export function richTextToPango(richText: TOrgRichText) {
+export const pangoGreyParentheticals =
+    (parens: Array<RegExp>) => (input: string) => {
+        let modified = input;
+        for (const paren of parens) {
+            modified = regexReplace(
+                modified,
+                paren,
+                x => `<span foreground="grey">${x}</span>`,
+            );
+        }
+        return modified;
+    };
+
+export function richTextToPango(
+    richText: TOrgRichText,
+    effects?: Array<(x: string) => string>,
+) {
     let pango = '';
 
     for (const chunk of richText) {
@@ -149,6 +166,10 @@ export function richTextToPango(richText: TOrgRichText) {
             .reverse()
             .map(x => `</${x}>`)
             .join('')}`;
+    }
+
+    for (const effect of effects) {
+        pango = effect(pango);
     }
 
     return pango.replaceAll('"', '\\"');
