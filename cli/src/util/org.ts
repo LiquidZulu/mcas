@@ -1,7 +1,7 @@
 import { pipe, Fn } from './pipe';
 import { regexReplace } from './regexReplace';
-import { TRichText } from '@internal/lib/types';
-import { b, i, bi } from '@internal/lib/util/richTextUtils';
+import { TRichText } from '../../../lib/types';
+import { b, i, bi } from '../../../lib/util/richTextUtils';
 import slugify from 'slugify';
 
 export type TOrgRichTextAtom = { effects: string[]; text: string };
