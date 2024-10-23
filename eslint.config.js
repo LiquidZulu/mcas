@@ -1,4 +1,4 @@
-export default [
+module.exports = [
     {
         ignores: ['lib', 'node_modules', 'dist', 'cli/assets/*'],
         env: {
