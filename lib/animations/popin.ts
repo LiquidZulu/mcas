@@ -1,15 +1,17 @@
+import { Shape } from '@motion-canvas/2d';
 import {
+    Reference,
+    chain,
+    Vector2,
     PlopSpring,
     SmoothSpring,
     spring,
-} from '@motion-canvas/core/lib/tweening';
-import { Shape } from '@motion-canvas/2d';
-import { Reference, chain, Vector2 } from '@motion-canvas/core';
+} from '@motion-canvas/core';
 
 export const popin = <T extends Shape>(
     ref: Reference<T>,
     from?: number,
-    to?: number
+    to?: number,
 ) =>
     spring(SmoothSpring, (from ?? 0) * 100, (to ?? 1) * 100, 1, value => {
         ref().scale(value / 100);
@@ -18,7 +20,7 @@ export const popin = <T extends Shape>(
 export const popout = <T extends Shape>(
     ref: Reference<T>,
     from?: number,
-    to?: number
+    to?: number,
 ) => {
     const initialScale = Math.max(ref().scale().x, ref().scale().y);
     return chain(
@@ -29,7 +31,7 @@ export const popout = <T extends Shape>(
             8,
             value => {
                 ref().scale(value / 100);
-            }
+            },
         ),
         spring(
             SmoothSpring,
@@ -38,8 +40,8 @@ export const popout = <T extends Shape>(
             1,
             value => {
                 ref().scale(value / 100);
-            }
-        )
+            },
+        ),
     );
 };
 
@@ -58,5 +60,5 @@ export const popoutSize = <T extends Shape>(ref: Reference<T>) =>
         }),
         spring(SmoothSpring, 100, 0, 1, value => {
             ref().size(getSize(ref().size(), value));
-        })
+        }),
     );
