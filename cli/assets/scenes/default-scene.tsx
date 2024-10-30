@@ -8,7 +8,8 @@ import {
     createRefArray,
     createSignal,
 } from '@motion-canvas/core';
-import { colors, McasTxt as Txt, popin, popout } from 'mcas';
+import { McasTxt as Txt, popin, popout, fadein, fadeout } from 'mcas';
+import * as colors from 'mcas/colors';
 
 export default makeScene2D(function* (view) {
     view.fill(colors.bg);
