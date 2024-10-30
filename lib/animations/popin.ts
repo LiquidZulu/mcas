@@ -2,11 +2,39 @@ import { Shape } from '@motion-canvas/2d';
 import {
     Reference,
     chain,
+    all,
     Vector2,
     PlopSpring,
     SmoothSpring,
     spring,
 } from '@motion-canvas/core';
+
+export const fadein = (ref: Reference<any>) => {
+    ref().opacity(0);
+    ref().scale(0.9);
+    return all(ref().scale(1, 1), ref().opacity(1, 1));
+};
+
+export const fadeinup = (ref: Reference<any>) => {
+    ref().opacity(0);
+    ref().position([0, 100]);
+    return all(ref().position([0, 0], 1), ref().opacity(1, 1));
+};
+
+export const fadeinright = (ref: Reference<any>) => {
+    ref().opacity(0);
+    ref().position([-100, 0]);
+    return all(ref().position([0, 0], 1), ref().opacity(1, 1));
+};
+
+export const fadeout = (ref: Reference<any>) =>
+    all(ref().scale(0.9, 1), ref().opacity(0, 1));
+
+export const fadeoutup = (ref: Reference<any>) =>
+    all(ref().position([0, -100], 1), ref().opacity(0, 1));
+
+export const fadeoutright = (ref: Reference<any>) =>
+    all(ref().position([100, 0], 1), ref().opacity(0, 1));
 
 export const popin = <T extends Shape>(
     ref: Reference<T>,
