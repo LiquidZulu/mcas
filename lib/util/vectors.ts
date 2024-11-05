@@ -1,5 +1,7 @@
 import { Vector2 } from '@motion-canvas/core';
 
+export const a = (size: number) => new Array(size).fill(size);
+
 export const distance = (v1: Vector2, v2: Vector2) =>
     Math.sqrt((v2.x - v1.x) ** 2 + (v2.y - v1.y) ** 2);
 

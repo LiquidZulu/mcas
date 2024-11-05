@@ -18,7 +18,7 @@ import { getLocalPos } from '../util';
 
 export function* flashAround(
     ref: Reference<any>,
-    duration: number,
+    duration?: number,
     delay?: number,
     opts?: {
         modPos?: Vector2Signal;
@@ -61,8 +61,6 @@ export function* flashAround(
         modLineWidth = createSignal(0);
     }
 
-    console.log(color);
-
     ref()
         .view()
         .add(
@@ -80,9 +78,10 @@ export function* flashAround(
             />,
         );
 
-    const d = delay ?? 0.2;
+    const de = delay ?? 0.2;
+    const du = duration ?? 1;
     yield* all(
-        rect().end(1, duration - d),
-        chain(waitFor(d), rect().start(1, duration - d)),
+        rect().end(1, du - de),
+        chain(waitFor(de), rect().start(1, du - de)),
     );
 }
