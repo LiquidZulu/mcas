@@ -1,1 +1,1 @@
-export const I = a => a;
+export const I = (a: any) => a;

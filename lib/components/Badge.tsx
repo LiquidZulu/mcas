@@ -1,4 +1,4 @@
-import { McasTxt as Txt } from '../';
+import { McasTxt as Txt } from './McasTxt';
 import {
     Node,
     NodeProps,

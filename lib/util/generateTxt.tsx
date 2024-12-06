@@ -1,5 +1,5 @@
-import { McasTxtProps, TRichText } from '../';
-import { McasTxt as Txt } from '../';
+import { TRichText } from '../types/TRichText';
+import { McasTxt as Txt, McasTxtProps } from '../components/McasTxt';
 
 export const generateTxt = (text: TRichText[], props?: McasTxtProps): Txt =>
     (

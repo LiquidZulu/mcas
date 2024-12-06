@@ -1,6 +1,6 @@
-import aristotle from '@internal/test/assets/aristotle.png';
-import quotes from '@internal/test/assets/aristotle.org-quotes';
-import { makeQuoteScene } from '@internal/lib/scenes/quote';
+import aristotle from '../../../test/assets/aristotle.png';
+import quotes from '../../../test/assets/aristotle.org-quotes';
+import { makeQuoteScene } from '../../../lib/scenes/quote';
 //import { i } from '@internal/lib/util';
 
 // if you want to have multiple possible authors, you need to add their pictures here.

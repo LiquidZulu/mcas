@@ -25,7 +25,9 @@ import {
     Gradient,
 } from '@motion-canvas/2d';
 
-import { SquigglyBorder, TRichText, generateTxt } from '../';
+import { TRichText } from '../types/TRichText';
+import { generateTxt } from '../util/generateTxt';
+import { SquigglyBorder } from '../components/SquigglyBorder';
 import * as colors from '../constants/colors';
 import mark from '../assets/quote-assets/quote-marks.png';
 export function makeQuoteScene(
