@@ -296,6 +296,7 @@ export const emerald700 = '#047857';
 export const emerald800 = '#065f46';
 export const emerald900 = '#064e3b';
 export const emerald950 = '#022c22';
+export const emerald999 = '#01140f';
 
 export const teal50 = '#f0fdfa';
 export const teal100 = '#ccfbf1';
@@ -392,6 +393,7 @@ export const fuchsia700 = '#a21caf';
 export const fuchsia800 = '#86198f';
 export const fuchsia900 = '#701a75';
 export const fuchsia950 = '#4a044e';
+export const fuchsia999 = '#170118';
 
 export const pink50 = '#fdf2f8';
 export const pink100 = '#fce7f3';
@@ -416,3 +418,4 @@ export const rose700 = '#be123c';
 export const rose800 = '#9f1239';
 export const rose900 = '#881337';
 export const rose950 = '#4c0519';
+export const rose999 = '#22020b';
