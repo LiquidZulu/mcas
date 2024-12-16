@@ -46,7 +46,7 @@
     },
     "devDependencies": {
         "@motion-canvas/ui": "^3.17.2",
-        "@motion-canvas/vite-plugin": "^3.17.0",
+        "@motion-canvas/vite-plugin": "^3.17.2",
         "@rollup/plugin-image": "^3.0.3",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-terser": "^0.4.4",
