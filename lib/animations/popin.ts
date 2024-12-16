@@ -67,7 +67,7 @@ export const popout = <T extends Shape>(
             (to ?? 0) * 100,
             1,
             value => {
-                ref().scale(value / 100);
+                ref().scale(Math.abs(value / 100));
             },
         ),
     );
