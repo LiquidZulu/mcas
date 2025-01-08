@@ -1,4 +1,4 @@
-import { Txt, TxtProps, initial, signal } from '@motion-canvas/2d';
+import { Node, Txt, TxtProps, initial, signal } from '@motion-canvas/2d';
 import {
     PossibleColor,
     SignalValue,
@@ -33,12 +33,30 @@ export class McasTxt extends Txt {
         this.shadowColor(this.fill as SignalValue<PossibleColor>);
 
         for (let child of this.children()) {
-            if ('text' in child)
-                (child as any).text(this.replace((child as any).text()));
+            child.children(this.replace(child.children()));
         }
     }
 
-    private replace(text: string) {
+    private replace(children: Node[]): Node[] {
+        let newChildren = [];
+        for (let child of children) {
+            if (child.children().length > 0) {
+                let babies = [];
+                for (let baby of child.children()) {
+                    baby.children(this.replace(baby.children()));
+                    babies.push(baby);
+                }
+                child.children(babies);
+                newChildren.push(child);
+            } else {
+                child.text(this.replacer(child.text()));
+                newChildren.push(child);
+            }
+        }
+        return newChildren;
+    }
+
+    private replacer(text: string) {
         return text
             .replaceAll(/(?<!\\)---/g, '—')
             .replaceAll(/\\---/g, '---')
