@@ -35,8 +35,8 @@
         "serve": "vite"
     },
     "peerDependencies": {
-        "@motion-canvas/2d": "^3.17.1",
-        "@motion-canvas/core": "^3.17.0"
+        "@motion-canvas/2d": "^3.17.2",
+        "@motion-canvas/core": "^3.17.2"
     },
     "dependencies": {
         "commander": "^13.0.0",

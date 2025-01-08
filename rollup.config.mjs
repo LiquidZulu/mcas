@@ -10,7 +10,7 @@ const config = [
     {
         input: 'cli/src/index.ts',
         output: {
-            file: 'cli/dist/index.mjs',
+            file: 'dist/cli/index.mjs',
             format: 'es',
         },
         plugins: [typescript(), json(), image()],
