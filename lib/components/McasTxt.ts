@@ -31,5 +31,18 @@ export class McasTxt extends Txt {
             ),
         );
         this.shadowColor(this.fill as SignalValue<PossibleColor>);
+
+        for (let child of this.children()) {
+            if ('text' in child)
+                (child as any).text(this.replace((child as any).text()));
+        }
+    }
+
+    private replace(text: string) {
+        return text
+            .replaceAll(/(?<!\\)---/g, '—')
+            .replaceAll(/\\---/g, '---')
+            .replaceAll(/(?<!\\)\\therefore/g, '∴')
+            .replaceAll(/\\\\therefore/g, String.raw`\therefore`);
     }
 }
