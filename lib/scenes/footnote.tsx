@@ -1,4 +1,4 @@
-import { makeScene2D, Ray, Txt, Rect } from '@motion-canvas/2d';
+import { makeScene2D, Ray, Txt, Rect, Node } from '@motion-canvas/2d';
 import { waitFor, chain, all, createRef } from '@motion-canvas/core';
 
 export default function makeFootnote(num: number) {
@@ -26,7 +26,7 @@ export default function makeFootnote(num: number) {
         };
 
         view.add(
-            <>
+            <Node>
                 <Rect
                     width={footnote.width}
                     height={footnote.height}
@@ -87,7 +87,7 @@ export default function makeFootnote(num: number) {
                     y={footnote.y + footnote.height - footnote.lineWidth / 2}
                     x={footnote.x + footnote.width / 2}
                 />
-            </>,
+            </Node>,
         );
 
         yield* all(
