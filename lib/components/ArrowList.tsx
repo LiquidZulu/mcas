@@ -5,7 +5,6 @@ import {
     signal,
     Rect,
     Ray,
-    Txt,
     colorSignal,
 } from '@motion-canvas/2d';
 import {
@@ -23,7 +22,7 @@ import {
 } from '@motion-canvas/core';
 
 import * as colors from '../constants/colors';
-import { McasTxt, McasTxtProps } from './McasTxt';
+import { McasTxt as Txt, McasTxtProps } from './McasTxt';
 
 export interface ArrowListProps extends NodeProps {
     vgap?: SimpleSignal<number>;
@@ -64,7 +63,7 @@ export class ArrowList extends Node {
 
         this.add(
             <Rect layout direction="column" gap={this.vgap}>
-                {...this.children().map((x: McasTxt) => (
+                {...this.children().map((x: Txt) => (
                     <Rect alignItems="center" gap={this.hgap}>
                         <Ray
                             end={0}
@@ -80,11 +79,12 @@ export class ArrowList extends Node {
                             ref={this.items}
                             fill={this.color}
                             textWrap={
-                                Object.hasOwn(x, 'textWrap')
-                                    ? (x as any).textWrap()
-                                    : false
+                                'textWrap' in x ? (x as any).textWrap() : false
                             }
-                            maxWidth={x.maxWidth}
+                            maxWidth={(() => {
+                                console.log('aaaaaaa', x.maxWidth);
+                                return x.maxWidth;
+                            })()}
                         >
                             {x}
                         </Txt>
