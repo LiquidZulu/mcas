@@ -4,3 +4,7 @@ export * from './Accordion';
 export * from './Avatar';
 export * from './Badge';
 export * from './ArrowList';
+export * from './Browser';
+export * from './PlaceholderPerson';
+export * from './Quote';
+export * from './Song';
