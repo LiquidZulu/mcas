@@ -17,10 +17,13 @@ import {
     all,
     chain,
     createRefArray,
+    delay,
     waitFor,
+    waitUntil,
 } from '@motion-canvas/core';
 
 import * as colors from '../constants/colors';
+import { McasTxt, McasTxtProps } from './McasTxt';
 
 export interface ArrowListProps extends NodeProps {
     vgap?: SimpleSignal<number>;
@@ -61,7 +64,7 @@ export class ArrowList extends Node {
 
         this.add(
             <Rect layout direction="column" gap={this.vgap}>
-                {...this.children().map(x => (
+                {...this.children().map((x: McasTxt) => (
                     <Rect alignItems="center" gap={this.hgap}>
                         <Ray
                             end={0}
@@ -72,7 +75,17 @@ export class ArrowList extends Node {
                             endArrow
                             arrowSize={12}
                         />
-                        <Txt opacity={0} ref={this.items} fill={this.color}>
+                        <Txt
+                            opacity={0}
+                            ref={this.items}
+                            fill={this.color}
+                            textWrap={
+                                Object.hasOwn(x, 'textWrap')
+                                    ? (x as any).textWrap()
+                                    : false
+                            }
+                            maxWidth={x.maxWidth}
+                        >
                             {x}
                         </Txt>
                     </Rect>
@@ -84,9 +97,12 @@ export class ArrowList extends Node {
         this.getRay = new Map(this.items.map((k, i) => [k, this.rays[i]]));
     }
 
-    public *next(duration?: number) {
+    public *next(event?: string, duration?: number) {
         for (let item of this.items) {
             if (!this.isShowing.get(item)) {
+                if (!!event) {
+                    yield* waitUntil(event);
+                }
                 yield* this.show(item, duration);
                 return;
             }
@@ -109,11 +125,19 @@ export class ArrowList extends Node {
         );
     }
 
-    public *showAll(duration?: number, delay?: number) {
-        yield* all(...this.items.map(item => this.show(item, duration, delay)));
+    public *showAll(duration?: number, delayAmount?: number) {
+        yield* all(
+            ...this.items.map((item, i) =>
+                delay((delayAmount ?? 0.1) * i, this.show(item, duration)),
+            ),
+        );
     }
 
-    public *hideAll(duration?: number, delay?: number) {
-        yield* all(...this.items.map(item => this.hide(item, duration, delay)));
+    public *hideAll(duration?: number, delayAmount?: number) {
+        yield* all(
+            ...this.items.map((item, i) =>
+                delay((delayAmount ?? 0.1) * i, this.hide(item, duration)),
+            ),
+        );
     }
 }
