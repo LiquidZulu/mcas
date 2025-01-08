@@ -6,6 +6,7 @@ import {
     ColorSignal,
     createRef,
     createSignal,
+    PossibleColor,
     Reference,
     SignalValue,
     SimpleSignal,
@@ -25,7 +26,7 @@ export function* flashAround(
         modWidth?: SimpleSignal<number>;
         modHeight?: SimpleSignal<number>;
         modLineWidth?: SimpleSignal<number>;
-        color?: Color;
+        color?: PossibleColor;
     },
     props?: RectProps,
 ) {
@@ -75,6 +76,7 @@ export function* flashAround(
                 end={0}
                 {...props}
                 ref={rect}
+                scale={ref().scale}
             />,
         );
 
