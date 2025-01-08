@@ -81,10 +81,7 @@ export class ArrowList extends Node {
                             textWrap={
                                 'textWrap' in x ? (x as any).textWrap() : false
                             }
-                            maxWidth={(() => {
-                                console.log('aaaaaaa', x.maxWidth);
-                                return x.maxWidth;
-                            })()}
+                            maxWidth={x.maxWidth}
                         >
                             {x}
                         </Txt>
