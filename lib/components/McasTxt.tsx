@@ -6,6 +6,8 @@ import {
     createSignal,
     unwrap,
 } from '@motion-canvas/core';
+import { pipe } from '../../cli/src/util/pipe';
+import { regexReplace } from 'cli/src/util/regexReplace';
 
 export interface McasTxtProps extends TxtProps {
     glow?: boolean | SignalValue<number>;
@@ -33,7 +35,9 @@ export class McasTxt extends Txt {
         this.shadowColor(this.fill as SignalValue<PossibleColor>);
 
         for (let child of this.children()) {
-            child.children(this.replace(child.children()));
+            if (child.children().length == 0) {
+                child.text(this.replacer(child.text()));
+            } else child.children(this.replace(child.children()));
         }
     }
 
@@ -57,10 +61,23 @@ export class McasTxt extends Txt {
     }
 
     private replacer(text: string) {
+        console.log('hellow');
+        console.log(text);
+        console.log(
+            text
+                .replaceAll(/(?<!\\)---/g, '—')
+                .replaceAll(/\\---/g, '---')
+                .replaceAll(/(?<!\\)\\therefore/g, '∴')
+                .replaceAll(/\\\\therefore/g, String.raw`\therefore`)
+                .replaceAll(/(?<!\\)\\dots/g, '…')
+                .replaceAll(/\\\\dots/g, String.raw`\dots`),
+        );
         return text
             .replaceAll(/(?<!\\)---/g, '—')
             .replaceAll(/\\---/g, '---')
             .replaceAll(/(?<!\\)\\therefore/g, '∴')
-            .replaceAll(/\\\\therefore/g, String.raw`\therefore`);
+            .replaceAll(/\\\\therefore/g, String.raw`\therefore`)
+            .replaceAll(/(?<!\\)\\dots/g, '…')
+            .replaceAll(/\\\\dots/g, String.raw`\dots`);
     }
 }
