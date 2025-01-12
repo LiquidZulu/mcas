@@ -6,6 +6,9 @@ import {
     Rect,
     Ray,
     colorSignal,
+    RectProps,
+    Vector2LengthSignal,
+    vector2Signal,
 } from '@motion-canvas/2d';
 import {
     ColorSignal,
@@ -13,6 +16,7 @@ import {
     ReferenceArray,
     SignalValue,
     SimpleSignal,
+    Vector2,
     all,
     chain,
     createRefArray,
@@ -24,14 +28,14 @@ import {
 import * as colors from '../constants/colors';
 import { McasTxt as Txt, McasTxtProps } from './McasTxt';
 
-export interface ArrowListProps extends NodeProps {
+export interface ArrowListProps extends RectProps {
     vgap?: SimpleSignal<number>;
     hgap?: SimpleSignal<number>;
     color?: SignalValue<PossibleColor>;
     rayColor?: SignalValue<PossibleColor>;
 }
 
-export class ArrowList extends Node {
+export class ArrowList extends Rect {
     @initial(64)
     @signal()
     public declare readonly vgap: SimpleSignal<number, this>;
@@ -54,6 +58,9 @@ export class ArrowList extends Node {
     private declare readonly isShowing: Map<Txt, boolean>;
     private declare readonly getRay: Map<Txt, Ray>;
 
+    @vector2Signal({ x: 'width', y: 'height' })
+    public declare readonly size: Vector2LengthSignal<this>;
+
     public constructor(props?: ArrowListProps) {
         super(props);
 
@@ -62,7 +69,12 @@ export class ArrowList extends Node {
         this.length = this.children().length;
 
         this.add(
-            <Rect layout direction="column" gap={this.vgap}>
+            <Rect
+                layout
+                direction="column"
+                gap={this.vgap}
+                {...('size' in props ? { size: this.size } : {})}
+            >
                 {...this.children().map((x: Txt) => (
                     <Rect alignItems="center" gap={this.hgap}>
                         <Ray
