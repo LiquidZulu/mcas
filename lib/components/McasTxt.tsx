@@ -61,17 +61,6 @@ export class McasTxt extends Txt {
     }
 
     private replacer(text: string) {
-        console.log('hellow');
-        console.log(text);
-        console.log(
-            text
-                .replaceAll(/(?<!\\)---/g, '—')
-                .replaceAll(/\\---/g, '---')
-                .replaceAll(/(?<!\\)\\therefore/g, '∴')
-                .replaceAll(/\\\\therefore/g, String.raw`\therefore`)
-                .replaceAll(/(?<!\\)\\dots/g, '…')
-                .replaceAll(/\\\\dots/g, String.raw`\dots`),
-        );
         return text
             .replaceAll(/(?<!\\)---/g, '—')
             .replaceAll(/\\---/g, '---')
