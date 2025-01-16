@@ -27,6 +27,12 @@ export const fadeinright = (ref: Reference<any>) => {
     return all(ref().position([0, 0], 1), ref().opacity(1, 1));
 };
 
+export const fadeinleft = (ref: Reference<any>) => {
+    ref().opacity(0);
+    ref().position([100, 0]);
+    return all(ref().position([0, 0], 1), ref().opacity(1, 1));
+};
+
 export const fadeout = (ref: Reference<any>) =>
     all(ref().scale(0.9, 1), ref().opacity(0, 1));
 
@@ -35,6 +41,9 @@ export const fadeoutup = (ref: Reference<any>) =>
 
 export const fadeoutright = (ref: Reference<any>) =>
     all(ref().position([100, 0], 1), ref().opacity(0, 1));
+
+export const fadeoutleft = (ref: Reference<any>) =>
+    all(ref().position([-100, 0], 1), ref().opacity(0, 1));
 
 export const popin = <T extends Shape>(
     ref: Reference<T>,
