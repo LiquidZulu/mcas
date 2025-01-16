@@ -72,7 +72,6 @@ export class Browser extends Rect {
             layout: true,
             alignItems: 'center',
             direction: 'column',
-
             ...props,
         });
 

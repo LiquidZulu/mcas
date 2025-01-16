@@ -8,3 +8,4 @@ export * from './Browser';
 export * from './PlaceholderPerson';
 export * from './Quote';
 export * from './Song';
+export * from './Tree';
