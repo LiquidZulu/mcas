@@ -36,7 +36,7 @@ export class McasTxt extends Txt {
 
         for (let child of this.children()) {
             if (child.children().length == 0) {
-                child.text(this.replacer(child.text()));
+                (child as any).text(this.replacer((child as any).text()));
             } else child.children(this.replace(child.children()));
         }
     }
@@ -53,7 +53,7 @@ export class McasTxt extends Txt {
                 child.children(babies);
                 newChildren.push(child);
             } else {
-                child.text(this.replacer(child.text()));
+                (child as any).text(this.replacer((child as any).text()));
                 newChildren.push(child);
             }
         }
