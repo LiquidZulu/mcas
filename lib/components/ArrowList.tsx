@@ -16,6 +16,7 @@ import {
     ReferenceArray,
     SignalValue,
     SimpleSignal,
+    ThreadGenerator,
     Vector2,
     all,
     chain,
@@ -106,13 +107,20 @@ export class ArrowList extends Rect {
         this.getRay = new Map(this.items.map((k, i) => [k, this.rays[i]]));
     }
 
-    public *next(event?: string, duration?: number) {
+    public *next(
+        event?: string,
+        duration?: number,
+        additionalThreads?: ThreadGenerator,
+    ) {
         for (let item of this.items) {
             if (!this.isShowing.get(item)) {
                 if (!!event) {
                     yield* waitUntil(event);
                 }
-                yield* this.show(item, duration);
+                yield* all(
+                    this.show(item, duration),
+                    additionalThreads ?? all(),
+                );
                 return;
             }
         }
