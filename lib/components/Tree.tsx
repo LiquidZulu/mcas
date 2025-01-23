@@ -195,7 +195,7 @@ export class Tree extends Rect {
     }
 
     public *show(delayy?: number) {
-        function* traverse(ref: TreeReference) {
+        function* traverse(ref: TreeReference): ThreadGenerator {
             yield* all(
                 fadein(ref.node),
                 delay(
@@ -216,7 +216,7 @@ export class Tree extends Rect {
     }
 
     public *hide(delayy?: number) {
-        function* traverse(ref: TreeReference) {
+        function* traverse(ref: TreeReference): ThreadGenerator {
             yield* all(
                 fadeout(ref.node),
                 delay(
