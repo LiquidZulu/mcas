@@ -22,6 +22,7 @@ import {
     chain,
     createRefArray,
     delay,
+    sequence,
     waitFor,
     waitUntil,
 } from '@motion-canvas/core';
@@ -30,8 +31,8 @@ import * as colors from '../constants/colors';
 import { McasTxt as Txt, McasTxtProps } from './McasTxt';
 
 export interface ArrowListProps extends RectProps {
-    vgap?: SimpleSignal<number>;
-    hgap?: SimpleSignal<number>;
+    vgap?: SignalValue<number>;
+    hgap?: SignalValue<number>;
     color?: SignalValue<PossibleColor>;
     rayColor?: SignalValue<PossibleColor>;
 }
@@ -150,11 +151,20 @@ export class ArrowList extends Rect {
         );
     }
 
-    public *hideAll(duration?: number, delayAmount?: number) {
-        yield* all(
-            ...this.items.map((item, i) =>
-                delay((delayAmount ?? 0.1) * i, this.hide(item, duration)),
-            ),
-        );
+    public *hideAll(
+        event?: string,
+        additionalThreads?: ThreadGenerator,
+        duration?: number,
+        delayAmount?: number,
+    ) {
+        if (!!event) {
+            yield* waitUntil(event);
+        }
+
+        const hidem = this.items.map(item => this.hide(item, duration));
+
+        yield* !!additionalThreads
+            ? sequence(delayAmount ?? 0.1, additionalThreads, ...hidem)
+            : sequence(delayAmount ?? 0.1, ...hidem);
     }
 }
