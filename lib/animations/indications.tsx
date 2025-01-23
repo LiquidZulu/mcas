@@ -16,6 +16,7 @@ import {
 } from '@motion-canvas/core';
 import * as colors from '../constants/colors';
 import { getLocalPos } from '../util';
+import { after } from './flow';
 
 export function* flashAround(
     ref: Reference<any>,
@@ -84,6 +85,27 @@ export function* flashAround(
     const du = duration ?? 1;
     yield* all(
         rect().end(1, du - de),
-        chain(waitFor(de), rect().start(1, du - de)),
+        chain(
+            waitFor(de),
+            rect().start(
+                0.9999, // if start goes to 1 and a radius is set, a circle will unavoidably appear for a single frame
+                du - de,
+            ),
+        ),
     );
+    rect().remove();
 }
+
+export const flash = (ref: Reference<any>, color?: PossibleColor) =>
+    flashAround(
+        ref,
+        null,
+        null,
+        { modWidth: createSignal(10), modHeight: createSignal(10) },
+        {
+            lineWidth: 6,
+            stroke: color ?? colors.purple500,
+            shadowBlur: 20,
+            shadowColor: color ?? colors.purple500,
+        },
+    );
