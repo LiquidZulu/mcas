@@ -1,4 +1,13 @@
-import { Node, Rect, Txt, TxtProps, initial, signal } from '@motion-canvas/2d';
+import {
+    CanvasStyleSignal,
+    Node,
+    Rect,
+    Txt,
+    TxtProps,
+    canvasStyleSignal,
+    initial,
+    signal,
+} from '@motion-canvas/2d';
 import {
     PossibleColor,
     SignalValue,
@@ -51,14 +60,19 @@ export class McasTxt extends Txt {
     @signal()
     public declare readonly glow: SimpleSignal<number, this>;
 
+    @initial('white')
+    @canvasStyleSignal()
+    public declare readonly fill: CanvasStyleSignal<this>;
+
     public constructor(props?: McasTxtProps) {
         super(props);
+        this.justify = props.justify;
 
-        if (!!props.justify) {
+        if (this.justify) {
             // for some reason node.properties leads to errors, so I'm just selecting ones that I think people will care about
             const getProps = (node: McasTxt): McasTxtProps => ({
                 fill: node.fill(),
-                glow: node.glow(),
+                glow: node.glow,
                 fontFamily: node.fontFamily(),
                 fontSize: node.fontSize(),
                 fontWeight: node.fontWeight(),
@@ -66,32 +80,47 @@ export class McasTxt extends Txt {
             });
 
             function flatten(
-                children: Node[],
+                children: McasTxt[],
                 properties: McasTxtProps,
             ): Node[] {
-                let newChildren: Node[] = [];
+                let newChildren: McasTxt[] = [];
                 for (let child of children) {
-                    if (child.children().length > 0) {
-                        newChildren = [
-                            ...newChildren,
-                            ...flatten(
-                                child.children(),
-                                getProps(child as McasTxt),
-                            ),
-                        ];
+                    if ('justify' in child && child.justify == false) {
+                        newChildren.push(
+                            (
+                                <McasTxt {...properties}>{child}</McasTxt>
+                            ) as McasTxt,
+                        );
                     } else {
-                        for (let word of (child as any).text().split(' ')) {
-                            if (word !== '') {
-                                newChildren.push(
-                                    <McasTxt {...properties}>{word}</McasTxt>,
-                                );
+                        if (child.children().length > 0) {
+                            newChildren = [
+                                ...newChildren,
+                                ...flatten(
+                                    child.children() as McasTxt[],
+                                    getProps(child as McasTxt),
+                                ),
+                            ] as McasTxt[];
+                        } else {
+                            for (let word of (child as any).text().split(' ')) {
+                                if (word !== '') {
+                                    newChildren.push(
+                                        (
+                                            <McasTxt {...properties}>
+                                                {word}
+                                            </McasTxt>
+                                        ) as McasTxt,
+                                    );
+                                }
                             }
                         }
                     }
                 }
                 return newChildren;
             }
-            const flatChildren = flatten(this.children(), getProps(this));
+            const flatChildren = flatten(
+                this.children() as McasTxt[],
+                getProps(this),
+            );
             this.removeChildren();
             this.add(
                 <Rect
