@@ -15,8 +15,6 @@ import {
     createSignal,
     unwrap,
 } from '@motion-canvas/core';
-import { pipe } from '../../cli/src/util/pipe';
-import { regexReplace } from 'cli/src/util/regexReplace';
 
 export interface McasTxtProps extends TxtProps {
     glow?: boolean | SignalValue<number>;
