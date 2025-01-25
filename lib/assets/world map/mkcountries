@@ -1,0 +1,82 @@
+#!/usr/bin/env node
+
+const { readFile } = require('node:fs');
+const { mkdir, writeFile } = require('node:fs/promises');
+const { join } = require('path');
+
+readFile('./world.svg', 'utf8', async (err, data) => {
+    if (err) {
+        console.error(err);
+        return;
+    }
+
+    const countries = data
+        .substring(
+            `\
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created for MapSVG plugin: http://mapsvg.com -->
+<svg
+   xmlns:mapsvg="http://mapsvg.com"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   mapsvg:geoViewBox="-169.110266 83.600842 190.486279 -58.508473"
+   width="1009.6727"
+   height="665.96301">
+
+  `.length,
+            data.length - 8,
+        )
+        .split('<path')
+        .filter(s => s !== '')
+        .map(x => x.trim())
+        .map(x => x.split('\n'))
+        .filter(s => s.length > 1)
+        .map(entry =>
+            entry.map(datum =>
+                datum.match(/"([^"]*)"/g)[0].replaceAll('"', ''),
+            ),
+        )
+        .map(([path, name, code]) => ({
+            path,
+            name,
+            code,
+        }));
+
+    try {
+        const dir = join(process.argv[1], '../', 'countries');
+        await mkdir(dir, { recursive: true });
+        let imports = '';
+        let bigExport = 'export default [';
+
+        for (let { path, name, code } of countries) {
+            const fileName = join(dir, `${code.toLowerCase()}.ts`);
+            const file = `\
+export default {
+    path: '${path}',
+    name: '${name}',
+    code: '${code}',
+};`;
+            imports += `import ${code.toLowerCase()} from './${code.toLowerCase()}';\nexport { default as ${code.toLowerCase()} } from './${code.toLowerCase()}';\n`;
+            bigExport += `\n\t${code.toLowerCase()},`;
+            console.log(`Writing to ${fileName}`);
+            await writeFile(fileName, file);
+        }
+
+        console.log('Writing index...');
+        await writeFile(
+            join(dir, 'index.ts'),
+            `\
+${imports}
+
+${bigExport}
+];
+`,
+        );
+
+        console.log('Done!');
+    } catch (e) {
+        console.error(e);
+    }
+});
