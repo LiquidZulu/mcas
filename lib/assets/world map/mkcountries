@@ -49,6 +49,7 @@ readFile('./world.svg', 'utf8', async (err, data) => {
         await mkdir(dir, { recursive: true });
         let imports = '';
         let bigExport = 'export default [';
+        const s = str => str.replace('-', '_');
 
         for (let { path, name, code } of countries) {
             const fileName = join(dir, `${code.toLowerCase()}.ts`);
@@ -58,10 +59,12 @@ export default {
     name: '${name}',
     code: '${code}',
 };`;
-            imports += `import ${code.toLowerCase()} from './${code.toLowerCase()}';\nexport { default as ${code
-                .toLowerCase()
-                .replace('-', '_')} } from './${code.toLowerCase()}';\n`;
-            bigExport += `\n\t${code.toLowerCase()},`;
+            imports += `import ${s(
+                code.toLowerCase(),
+            )} from './${code.toLowerCase()}';\nexport { default as ${s(
+                code.toLowerCase(),
+            )} } from './${code.toLowerCase()}';\n`;
+            bigExport += `\n\t${s(code.toLowerCase())},`;
             console.log(`Writing to ${fileName}`);
             await writeFile(fileName, file);
         }

@@ -464,17 +464,17 @@ import ua from './ua';
 export { default as ua } from './ua';
 import ug from './ug';
 export { default as ug } from './ug';
-import um-dq from './um-dq';
+import um_dq from './um-dq';
 export { default as um_dq } from './um-dq';
-import um-fq from './um-fq';
+import um_fq from './um-fq';
 export { default as um_fq } from './um-fq';
-import um-hq from './um-hq';
+import um_hq from './um-hq';
 export { default as um_hq } from './um-hq';
-import um-jq from './um-jq';
+import um_jq from './um-jq';
 export { default as um_jq } from './um-jq';
-import um-mq from './um-mq';
+import um_mq from './um-mq';
 export { default as um_mq } from './um-mq';
-import um-wq from './um-wq';
+import um_wq from './um-wq';
 export { default as um_wq } from './um-wq';
 import us from './us';
 export { default as us } from './us';
@@ -746,12 +746,12 @@ export default [
 	tz,
 	ua,
 	ug,
-	um-dq,
-	um-fq,
-	um-hq,
-	um-jq,
-	um-mq,
-	um-wq,
+	um_dq,
+	um_fq,
+	um_hq,
+	um_jq,
+	um_mq,
+	um_wq,
 	us,
 	uy,
 	uz,
