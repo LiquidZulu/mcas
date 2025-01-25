@@ -58,7 +58,9 @@ export default {
     name: '${name}',
     code: '${code}',
 };`;
-            imports += `import ${code.toLowerCase()} from './${code.toLowerCase()}';\nexport { default as ${code.toLowerCase()} } from './${code.toLowerCase()}';\n`;
+            imports += `import ${code.toLowerCase()} from './${code.toLowerCase()}';\nexport { default as ${code
+                .toLowerCase()
+                .replace('-', '_')} } from './${code.toLowerCase()}';\n`;
             bigExport += `\n\t${code.toLowerCase()},`;
             console.log(`Writing to ${fileName}`);
             await writeFile(fileName, file);
