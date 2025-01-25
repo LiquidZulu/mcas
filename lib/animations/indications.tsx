@@ -16,7 +16,6 @@ import {
 } from '@motion-canvas/core';
 import * as colors from '../constants/colors';
 import { getLocalPos } from '../util';
-import { after } from './flow';
 
 export function* flashAround(
     ref: Reference<any>,

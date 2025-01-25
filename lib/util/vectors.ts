@@ -14,3 +14,17 @@ export const vectorSum = (...vecs: Vector2[]) =>
         (a: Vector2, e: Vector2) => new Vector2(a.x + e.x, a.y + e.y),
         new Vector2([0, 0]),
     );
+
+export const getLocalPos = (pos: Vector2, mod?: Vector2) => {
+    const { x, y } = pos;
+
+    let m = [0, 0];
+    if (!!mod) {
+        m = [mod.x, mod.y];
+    }
+
+    return {
+        x: x - 1920 / 2 + m[0],
+        y: y - 1080 / 2 + m[1],
+    };
+};

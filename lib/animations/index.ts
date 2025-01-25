@@ -1,4 +1,4 @@
 export * from './effects';
-export * from './popin';
+export * from './apparators';
 export * from './indications';
 export * from './flow';
