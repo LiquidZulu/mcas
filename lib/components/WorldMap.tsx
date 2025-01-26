@@ -238,11 +238,8 @@ export class WorldMap extends Rect {
         timingFunction?: TimingFunction,
         interpolationFunction?: InterpolationFunction<Vector2>,
     ) {
-        const pos = this.getPositionFromCoordinates(coords);
-
-        this.cont().add(<Circle fill="red" position={pos} size={1} />);
         yield* this.camera().centerOn(
-            pos,
+            this.getPositionFromCoordinates(coords),
             duration ?? 1,
             timingFunction,
             interpolationFunction,
