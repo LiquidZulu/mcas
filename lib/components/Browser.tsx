@@ -25,6 +25,7 @@ import { McasTxt as Txt } from './McasTxt';
 
 export interface BrowserProps extends RectProps {
     scroll?: SignalValue<number>;
+    scrollOffset?: SignalValue<number>;
     hyperlink?: SignalValue<string>;
     truncateHyperlink?: SignalValue<boolean>;
 }
@@ -57,6 +58,10 @@ export class Browser extends Rect {
     @initial(0)
     @signal()
     public declare readonly scroll: SimpleSignal<number, this>;
+
+    @initial(60)
+    @signal()
+    public declare readonly scrollOffset: SimpleSignal<number, this>;
 
     @initial('')
     @signal()
@@ -136,11 +141,11 @@ export class Browser extends Rect {
                         console.log(contentHeight, this.scroll());
                         return [
                             0,
-                            contentHeight / 2 -
+                            contentHeight / 4 -
                                 (contentHeight * this.scroll() -
                                     this.height() * this.scroll()) -
                                 this.height() / 2 +
-                                30,
+                                this.scrollOffset(),
                         ];
                     })}
                 >

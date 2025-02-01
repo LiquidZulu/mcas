@@ -1,13 +1,33 @@
-import { access, constants, readFile, writeFile, open } from 'fs/promises';
-import { dirname, join } from 'path';
+const { access, constants, readFile, writeFile, open } = require('fs/promises');
+const { createWriteStream, existsSync } = require('fs');
+const { dirname, join } = require('path');
+const axios = require('axios');
 
-export async function createAndWrite(file: string, logging?: boolean) {
-    const log = logging === false ? (..._: any[]) => {} : console.log;
+module.exports.download = (url, path) => {
+    if (!existsSync(path) && url) {
+        console.log(url);
+        axios({
+            url,
+            responseType: 'stream',
+        }).then(
+            response =>
+                new Promise((resolve, reject) => {
+                    response.data
+                        .pipe(createWriteStream(path))
+                        .on('finish', () => resolve())
+                        .on('error', e => reject(e));
+                }),
+        );
+    }
+};
+
+module.exports.createAndWrite = async function (file, logging) {
+    const log = logging === false ? (..._) => {} : console.log;
 
     try {
         // it exists already, don't overwrite it
         await access(file);
-        console.log('Database file already exists ', file);
+        log('Database file already exists ', file);
     } catch (e) {
         if (e.code === 'ENOENT') {
             log('Creating file ', file);
@@ -19,13 +39,11 @@ export async function createAndWrite(file: string, logging?: boolean) {
             throw e;
         }
     }
-}
+};
 
-export const root = () => join(dirname(process.argv[1]), '../../');
-
-export async function getParentPackageJSON(
-    dir: string,
-): Promise<string | false> {
+module.exports.root = () => join(dirname(process.argv[1]), '../../');
+module.exports.getParentPackageJSON = getParentPackageJSON;
+async function getParentPackageJSON(dir) {
     let currentDir = dir;
 
     // make this recursive at some point
@@ -47,7 +65,7 @@ export async function getParentPackageJSON(
     }
 }
 
-export async function dirIsMotionCanvas(dir: string): Promise<boolean> {
+module.exports.dirIsMotionCanvas = async function (dir) {
     try {
         await access(join(dir), constants.R_OK | constants.W_OK);
     } catch (e) {
@@ -72,4 +90,4 @@ export async function dirIsMotionCanvas(dir: string): Promise<boolean> {
     }
 
     return false;
-}
+};
