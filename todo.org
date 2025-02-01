@@ -1,0 +1,4 @@
+#+title: TODO
+
++ I almost have the ability to give the youtube component a url and have it grab the relevant information; all of the code necessary to do the scraping is in cli/ but the plugin just is not working at all, I can't access the filesystem or anything.
+  + To fix, I'll probably have to start from scratch and make a server or something which can be queried from the client. I don't know how to do this.
