@@ -39,7 +39,7 @@
         "@motion-canvas/core": "^3.17.2"
     },
     "dependencies": {
-        "axios": "^1.8.2",
+        "axios": "^1.8.3",
         "commander": "^13.0.0",
         "exec-sh": "^0.4.0",
         "express": "^4.21.2",
