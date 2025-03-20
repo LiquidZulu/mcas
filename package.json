@@ -45,7 +45,7 @@
         "express": "^4.21.2",
         "image-size": "^2.0.1",
         "slugify": "^1.6.6",
-        "youtubei.js": "^13.1.0"
+        "youtubei.js": "^13.2.0"
     },
     "devDependencies": {
         "@motion-canvas/ui": "^3.17.2",
