@@ -93,19 +93,25 @@ const orgEffect = (char: string, name: string) => (text: string) => {
     if (text == '' || text == undefined) return proc;
     let inEffect = false;
     let i = 0;
+    let prev = '';
     for (const letter of text.split('')) {
-        if (letter == char) {
+        if (letter == char && prev !== '\\' && prev !== '<') {
             ++i;
             if (inEffect) {
                 inEffect = false;
                 proc.push({ effects: [], text: '' });
-            } else {
+            } else if (prev == ' ') {
                 inEffect = true;
                 proc.push({ effects: [name], text: '' });
+            } else {
+                --i;
+                proc[i].text = `${proc[i].text}${letter}`;
             }
-        } else {
+        } else if (letter !== '\\') {
             proc[i].text = `${proc[i].text}${letter}`;
         }
+
+        prev = letter;
     }
     return proc;
 };
@@ -135,8 +141,8 @@ const filterBlankText = (procText: TOrgRichText) =>
 export const orgBold = orgEffect('*', 'b');
 export const orgItallic = orgEffect('/', 'i');
 export const orgRichText: Fn<string, TOrgRichText> = pipe(
-    orgBold,
-    orgApplyEffect(orgItallic),
+    orgItallic, // TODO: make it so that I can have orgItallic second. Currently it has to be first or else the code to deal with backslash escapes does not work, so you can't manually put in pango tags. I imagine its a problem with orgApplyEffect.
+    orgApplyEffect(orgBold),
     filterBlankText,
 );
 

@@ -1,4 +1,4 @@
-import { createSignal, SignalValue } from '@motion-canvas/core';
+import { createSignal, SignalValue, SimpleSignal } from '@motion-canvas/core';
 
 export const commaSeparators = (
     num: number | string,
@@ -25,9 +25,15 @@ export const interleaver =
         return accumulator;
     };
 
-export function mkSignal<T>(x: SignalValue<T>) {
-    if (typeof x === 'function') {
-        return x;
+export function mkSignal<T>(x: SignalValue<T>): SimpleSignal<T> {
+    if (
+        typeof x === 'function' &&
+        'context' in x &&
+        'isInitial' in x &&
+        'reset' in x &&
+        'save' in x
+    ) {
+        return x as SimpleSignal<T>;
     }
 
     return createSignal(x);

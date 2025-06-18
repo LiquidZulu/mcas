@@ -15,7 +15,7 @@ import {
     waitFor,
 } from '@motion-canvas/core';
 import * as colors from '../constants/colors';
-import { getLocalPos } from '../util';
+import { getLocalPos, vectorSum } from '../util';
 
 export function* flashAround(
     ref: Reference<any>,
@@ -66,9 +66,6 @@ export function* flashAround(
         .view()
         .add(
             <Rect
-                position={createSignal(() =>
-                    getLocalPos(ref().absolutePosition(), modPos()),
-                )}
                 width={createSignal(() => ref().width() + modWidth())}
                 height={createSignal(() => ref().height() + modHeight())}
                 lineWidth={createSignal(() => 2 + modLineWidth())}
@@ -79,6 +76,10 @@ export function* flashAround(
                 scale={ref().scale}
             />,
         );
+
+    rect().absolutePosition(
+        createSignal(() => vectorSum(ref().absolutePosition(), modPos())),
+    );
 
     const de = delay ?? 0.2;
     const du = duration ?? 1;

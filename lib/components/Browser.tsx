@@ -3,6 +3,8 @@ import {
     colorSignal,
     Img,
     initial,
+    Ray,
+    RayProps,
     Rect,
     RectProps,
     Shape,
@@ -11,23 +13,34 @@ import {
     vector2Signal,
 } from '@motion-canvas/2d';
 import {
+    all,
     Color,
     ColorSignal,
+    createRefArray,
     createSignal,
+    PossibleVector2,
+    Reference,
+    ReferenceArray,
     SignalValue,
     SimpleSignal,
     SpacingSignal,
+    ThreadGenerator,
     Vector2,
     Vector2Signal,
 } from '@motion-canvas/core';
 import { colors } from '../constants';
 import { McasTxt as Txt } from './McasTxt';
 
+export type BrowserHighlight =
+    | [PossibleVector2, number]
+    | [PossibleVector2, PossibleVector2];
+
 export interface BrowserProps extends RectProps {
     scroll?: SignalValue<number>;
     scrollOffset?: SignalValue<number>;
     hyperlink?: SignalValue<string>;
     truncateHyperlink?: SignalValue<boolean>;
+    highlight?: SignalValue<number>;
 }
 
 export class Browser extends Rect {
@@ -57,19 +70,27 @@ export class Browser extends Rect {
 
     @initial(0)
     @signal()
-    public declare readonly scroll: SimpleSignal<number, this>;
+    public readonly scroll: SimpleSignal<number, this>;
 
     @initial(60)
     @signal()
-    public declare readonly scrollOffset: SimpleSignal<number, this>;
+    public readonly scrollOffset: SimpleSignal<number, this>;
 
     @initial('')
     @signal()
-    public declare readonly hyperlink: SimpleSignal<string, this>;
+    public readonly hyperlink: SimpleSignal<string, this>;
 
     @initial(true)
     @signal()
-    public declare readonly truncateHyperlink: SimpleSignal<boolean, this>;
+    public readonly truncateHyperlink: SimpleSignal<boolean, this>;
+
+    @initial(0)
+    @signal()
+    public readonly highlight: SimpleSignal<number, this>;
+    public highlightRays: ReferenceArray<Ray>[] = [];
+    private highlights = 0;
+
+    private contentHeight: number;
 
     constructor(props?: BrowserProps) {
         super({
@@ -127,27 +148,25 @@ export class Browser extends Rect {
                 </Rect>
             </Rect>,
         );
+
+        this.contentHeight = (props.children as any as Shape).height();
+
         this.add(
             <Rect clip height="100%" fill="white" width="100%">
                 <Rect
                     layout={false}
                     width="100%"
-                    position={createSignal(() => {
-                        const contentHeight = (
-                            this.children()[1]
-                                .children()[0]
-                                .children()[0] as any as Shape
-                        ).height();
-                        console.log(contentHeight, this.scroll());
-                        return [
-                            0,
-                            contentHeight / 4 -
-                                (contentHeight * this.scroll() -
-                                    this.height() * this.scroll()) -
-                                this.height() / 2 +
-                                this.scrollOffset(),
-                        ];
-                    })}
+                    position={createSignal(
+                        () =>
+                            new Vector2(
+                                0,
+                                this.contentHeight / 4 -
+                                    (this.contentHeight * this.scroll() -
+                                        this.height() * this.scroll()) -
+                                    this.height() / 2 +
+                                    this.scrollOffset(),
+                            ),
+                    )}
                 >
                     {props.children}
                 </Rect>
@@ -164,5 +183,93 @@ export class Browser extends Rect {
                 />
             </Rect>,
         );
+    }
+
+    // browser().mkHighlight(width, [start: Vector2, length], [start: Vector2, length], ...)
+    // browser().mkHighlight(rayProps, [start: Vector2, length], [start: Vector2, length], ...)
+    // browser().mkHighlight(rayProps, [from, to], [from, to], ...)
+
+    public mkHighlight(width: number, ...highlights: BrowserHighlight[]): this;
+    public mkHighlight(
+        rayProps: RayProps,
+        ...highlights: BrowserHighlight[]
+    ): this;
+    public mkHighlight(
+        widthOrRayProps: number | RayProps,
+        ...highlights: BrowserHighlight[]
+    ): this {
+        this.highlightRays.push(createRefArray<Ray>());
+
+        const props =
+            typeof widthOrRayProps === 'number'
+                ? { lineWidth: widthOrRayProps }
+                : widthOrRayProps;
+
+        for (let highlight of highlights) {
+            this.addHighlight(props, highlight);
+        }
+
+        const rays = this.highlightRays[this.highlightRays.length - 1];
+
+        for (let i = 0; i < rays.length; ++i) {
+            const a = this.highlights;
+            rays[i].end(
+                createSignal(() => (this.highlight() - a) * rays.length - i),
+            );
+        }
+        this.highlights++;
+        return this;
+    }
+
+    private addHighlight(props: RayProps, [a, b]: BrowserHighlight) {
+        const f = new Vector2(a);
+        const t =
+            typeof b === 'number' ? new Vector2(f.x + b, f.y) : new Vector2(b);
+
+        this.children()[1]
+            .children()[0]
+            .add(
+                <Ray
+                    ref={this.highlightRays[this.highlights]}
+                    position={new Vector2(0, -this.contentHeight / 4 - 25)}
+                    layout={false}
+                    from={f}
+                    to={t}
+                    lineWidth={18}
+                    stroke={colors.yellow500}
+                    opacity={0.5}
+                    {...props}
+                />,
+            );
+    }
+
+    public removeHighlights() {
+        for (let arr of this.highlightRays) {
+            for (let h of arr) {
+                h.remove();
+            }
+        }
+
+        this.highlightRays = [];
+        this.highlights = 0;
+    }
+
+    public *animateHighlights(
+        animator: (
+            ray?: Ray,
+            highlightsIndex?: number,
+            rayIndex?: number,
+        ) => ThreadGenerator,
+    ) {
+        let toYield = [];
+
+        for (let i = 0; i < this.highlightRays.length; ++i) {
+            const highlight = this.highlightRays[i];
+            for (let j = 0; j < highlight.length; ++j) {
+                toYield.push(animator(highlight[j], i, j));
+            }
+        }
+
+        yield* all(...toYield);
     }
 }

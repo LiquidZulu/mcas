@@ -3,6 +3,22 @@ import { Color } from '@motion-canvas/core';
 export const bg = '#121316';
 export const bgpurple = '#030014';
 export const bggreen = '#031701';
+export const bgorange = '#140700';
+
+export const twitter = {
+    light: '#ffffff',
+    dim: '#15202B',
+    dark: '#000000',
+    default: '#ffffff',
+    'lights out': '#000000',
+};
+
+export const yt = {
+    dark: '#0f0f0f',
+    light: '#ffffff',
+    videoSubtext: '#909090',
+};
+
 // https://github.com/bahamas10/css-color-names/blob/master/css-color-names.json
 export const aliceblue = '#f0f8ff';
 export const antiquewhite = '#faebd7';

@@ -9,6 +9,7 @@ import {
     RectProps,
     Shape,
     signal,
+    Txt,
     Vector2LengthSignal,
     vector2Signal,
 } from '@motion-canvas/2d';
@@ -20,6 +21,7 @@ import {
     createSignal,
     delay,
     Reference,
+    sequence,
     SignalValue,
     SimpleSignal,
     SpacingSignal,
@@ -28,9 +30,10 @@ import {
     Vector2Signal,
 } from '@motion-canvas/core';
 import { colors } from '../constants';
-import { McasTxt as Txt } from './McasTxt';
-import { getLocalPos } from '../util';
+import { McasTxt } from './McasTxt';
+import { getLocalPos, mkSignal } from '../util';
 import { fadein, fadeout } from '../animations';
+import { cyan500, rose500, violet500 } from '../constants/colors';
 
 type NTree<T extends Shape = Shape> = {
     node: T;
@@ -44,7 +47,7 @@ type TreeReference<T extends Shape = Shape> = {
 
 export interface TreeProps extends RectProps {
     tree: NTree;
-    crush?: SignalValue<(depth: number) => number>;
+    crush?: SimpleSignal<(depth: number) => number>;
     rayOffset?: SignalValue<number>;
     hidden?: boolean;
 }
@@ -53,13 +56,7 @@ export class Tree extends Rect {
     private declare readonly tree: NTree;
     public declare treeRef: TreeReference;
     public declare readonly hidden: boolean;
-
-    @initial(1)
-    @signal()
-    public declare readonly crush: SimpleSignal<
-        (depth: number) => number,
-        this
-    >;
+    public declare readonly crush: SimpleSignal<(depth: number) => number>;
 
     @initial(64)
     @vector2Signal({ x: 'columnGap', y: 'rowGap' })
@@ -79,8 +76,8 @@ export class Tree extends Rect {
 
         this.treeRef = { node: createRef<any>(), children: [] };
         this.hidden = 'hidden' in props ? props.hidden : false;
-
-        // no clue why this is required, because I already did super() but for whatever reason if I don't manually do it everything breaks as of 2025-01-16
+        this.crush = (props.crush ??
+            createSignal(() => (_: number) => 1)) as TreeProps['crush'];
         this.tree = props.tree;
 
         let depth = 0;
@@ -98,10 +95,14 @@ export class Tree extends Rect {
                     layout
                     direction="column"
                     alignItems="center"
-                    gap={this.gap}
+                    gap={this.rowGap}
                 >
                     <Rect ref={ref.node}>{tree.node}</Rect>
-                    <Rect ref={childrenCont} justifyContent="stretch" />
+                    <Rect
+                        gap={this.columnGap}
+                        ref={childrenCont}
+                        justifyContent="stretch"
+                    />
                 </Rect>,
             );
 
@@ -233,6 +234,94 @@ export class Tree extends Rect {
             );
         }
 
+        yield* traverse(this.treeRef);
+    }
+
+    public *highlight(delayy?: number) {
+        function* h(ref: Reference<any>) {
+            if (isTxt(ref)) {
+                const initialColor = ref().children()[0].fill();
+                const initialShadowColor = ref().children()[0].shadowColor();
+                const initialBlur = ref().children()[0].shadowBlur();
+                yield* all(
+                    ref()
+                        .children()[0]
+                        .shadowBlur(
+                            Math.max(initialBlur, ref().fontSize()),
+                            0.5,
+                        )
+                        .to(initialBlur, 0.5),
+                    ref()
+                        .children()[0]
+                        .shadowColor(rose500, 1 / 3)
+                        .to(violet500, 1 / 3)
+                        .to(initialShadowColor, 1 / 3),
+                    ref()
+                        .children()[0]
+                        .fill(rose500, 1 / 3)
+                        .to(violet500, 1 / 3)
+                        .to(initialColor, 1 / 3),
+                );
+            } else if (ref() instanceof Ray) {
+                const initialColor = ref().stroke();
+                const initialShadowColor = ref().shadowColor();
+                const initialBlur = ref().shadowBlur();
+                yield* all(
+                    ref()
+                        .shadowBlur(
+                            Math.max(initialBlur, ref().fontSize()),
+                            0.5,
+                        )
+                        .to(initialBlur, 0.5),
+                    ref()
+                        .shadowColor(rose500, 1 / 3)
+                        .to(violet500, 1 / 3)
+                        .to(initialShadowColor, 1 / 3),
+                    ref()
+                        .stroke(rose500, 1 / 3)
+                        .to(violet500, 1 / 3)
+                        .to(initialColor, 1 / 3),
+                );
+            } else {
+                const initialColor = ref().shadowColor();
+                const initialBlur = ref().shadowBlur();
+                yield* all(
+                    ref()
+                        .shadowBlur(
+                            Math.max(initialBlur, ref().fontSize()),
+                            0.5,
+                        )
+                        .to(initialBlur, 0.5),
+                    ref()
+                        .shadowColor(rose500, 1 / 3)
+                        .to(violet500, 1 / 3)
+                        .to(initialColor, 1 / 3),
+                );
+            }
+        }
+        function* traverse(ref: TreeReference): ThreadGenerator {
+            yield* all(
+                h(ref.node),
+                delay(
+                    delayy ?? 0.1,
+                    sequence(
+                        delayy ?? 0.1,
+                        ...ref.children.map(({ child, ray }) =>
+                            sequence(delayy ?? 0.1, h(ray), traverse(child)),
+                        ),
+                    ),
+                ),
+            );
+        }
+        function isTxt(r?: Reference<any>) {
+            if (r().children && r() instanceof Rect) {
+                return (
+                    r()?.children()[0] instanceof Txt ||
+                    r()?.children()[0] instanceof McasTxt
+                );
+            }
+            return false;
+        }
         yield* traverse(this.treeRef);
     }
 }

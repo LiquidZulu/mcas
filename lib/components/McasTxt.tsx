@@ -9,16 +9,25 @@ import {
     signal,
 } from '@motion-canvas/2d';
 import {
+    InterpolationFunction,
     PossibleColor,
     SignalValue,
     SimpleSignal,
+    ThreadGenerator,
+    TimingFunction,
+    createEffect,
     createSignal,
+    threadable,
     unwrap,
 } from '@motion-canvas/core';
+import { mkSignal } from '../util';
+import { TxtLeaf } from '@motion-canvas/2d/lib/components/TxtLeaf';
 
 export interface McasTxtProps extends TxtProps {
     glow?: boolean | SignalValue<number>;
     justify?: boolean;
+    uppercase?: SignalValue<boolean>;
+    lowercase?: SignalValue<boolean>;
 }
 
 export class McasTxt extends Txt {
@@ -52,28 +61,51 @@ export class McasTxt extends Txt {
         return new McasTxt({ ...props, fontStyle: 'italic' });
     }
 
-    public declare readonly justify: boolean;
+    declare public readonly justify: boolean;
 
     @initial(false)
     @signal()
-    public declare readonly glow: SimpleSignal<number, this>;
+    declare public readonly glow: SimpleSignal<number, this>;
 
     @initial('white')
     @canvasStyleSignal()
-    public declare readonly fill: CanvasStyleSignal<this>;
+    declare public readonly fill: CanvasStyleSignal<this>;
+
+    @initial(false)
+    @signal()
+    declare public readonly uppercase: SimpleSignal<boolean>;
+
+    @initial(false)
+    @signal()
+    declare public readonly lowercase: SimpleSignal<boolean>;
 
     public constructor(props?: McasTxtProps) {
         super(props);
+
         this.justify = props.justify;
+
+        if (this.uppercase()) {
+            this.text(this.text().toUpperCase());
+            this.mkTextEffect(t => (this.uppercase() ? t.toUpperCase() : t));
+        } else if (this.lowercase()) {
+            this.text(this.text().toLowerCase());
+            this.mkTextEffect(t =>
+                this.lowercase() && !this.uppercase() ? t.toLowerCase() : t,
+            );
+        }
 
         if (this.justify) {
             // for some reason node.properties leads to errors, so I'm just selecting ones that I think people will care about
             const getProps = (node: McasTxt): McasTxtProps => ({
+                stroke: node.stroke(),
+                strokeFirst: node.strokeFirst(),
+                lineWidth: node.lineWidth(),
                 fill: node.fill(),
                 glow: node.glow,
                 fontFamily: node.fontFamily(),
                 fontSize: node.fontSize(),
                 fontWeight: node.fontWeight(),
+                fontStyle: node.fontStyle(),
                 scale: node.scale(),
             });
 
@@ -151,6 +183,12 @@ export class McasTxt extends Txt {
         }
     }
 
+    public mkTextEffect(cb: (text: string) => string) {
+        createEffect(() => {
+            this.text(cb(this.text()));
+        });
+    }
+
     private replace(children: Node[]): Node[] {
         let newChildren = [];
         for (let child of children) {
@@ -171,14 +209,63 @@ export class McasTxt extends Txt {
     }
 
     public replacer(text: string) {
+        const r =
+            (...substitutions: Array<[string, string]>) =>
+            (t: string) =>
+                substitutions.reduce(
+                    (v: string, [i, o]: [string, string]) =>
+                        v
+                            .replaceAll(
+                                new RegExp(
+                                    String.raw`(?<!\\)${
+                                        i.substring(0, 1) == '\\' ? '\\' + i : i
+                                    }`,
+                                    'g',
+                                ),
+                                o,
+                            )
+                            .replaceAll(
+                                new RegExp(
+                                    String.raw`\\${
+                                        i.substring(0, 1) == '\\' ? '\\' + i : i
+                                    }`,
+                                    'g',
+                                ),
+                                String.raw`\​${i.substring(1)}`,
+                            ),
+                    t,
+                );
+
+        return r(
+            ['---', '—'],
+            ['--', '–'],
+            [String.raw`\therefore`, '∴'],
+            [String.raw`\because`, '∵'],
+            [String.raw`\dots`, '…'],
+        )(text);
+
         return text
             .replaceAll(/(?<!\\)---/g, '—')
             .replaceAll(/\\---/g, '---')
+            .replaceAll(/(?<!\\)--/g, '–')
+            .replaceAll(/\\--/g, '--')
             .replaceAll(/(?<!\\)\\therefore/g, '∴')
             .replaceAll(/\\\\therefore/g, String.raw`\therefore`)
             .replaceAll(/(?<!\\)\\because/g, '∵')
             .replaceAll(/\\\\because/g, String.raw`\because`)
             .replaceAll(/(?<!\\)\\dots/g, '…')
             .replaceAll(/\\\\dots/g, String.raw`\dots`);
+    }
+
+    public childText(textNode?: Node) {
+        const t = textNode ?? this;
+        let text = '';
+
+        for (let child of this.children()) {
+            if (!('text' in child)) text += this.childText(child);
+            else text += child.text();
+        }
+
+        return this.getText();
     }
 }

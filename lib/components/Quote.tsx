@@ -74,6 +74,7 @@ export class Quote extends Rect {
                 <Rect width={512} height={680}>
                     <SquigglyBorder ref={this.squiggly}>
                         <Rect
+                            clip
                             layout={false}
                             cache
                             width={512}
@@ -210,6 +211,8 @@ export class Quote extends Rect {
             }
         });
 
+        this.opacity(1);
+
         yield* all(
             this.squiggly().opacity(1, duration ?? 0.5),
             this.squiggly().scale(1, duration ?? 0.5),
@@ -257,6 +260,7 @@ export class Quote extends Rect {
             this.citation().opacity(0, duration ?? 0.5),
             this.citation().margin([50, 0, 50, 0], duration ?? 0.5),
             this.text().opacity(0, duration ?? 0.5),
+            this.opacity(0, duration ?? 0.5),
         );
 
         this.isShowing = false;
