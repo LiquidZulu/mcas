@@ -3,7 +3,15 @@ import { readFile, writeFile } from 'fs/promises';
 import { root, dirIsMotionCanvas, getParentPackageJSON } from '../util/fs';
 import { join } from 'path';
 
-export async function handleScenes(names: string[]) {
+export async function handleScenes(
+    names: string[],
+    sceneContent?: string,
+    dotMeta?: {
+        version: number;
+        timeEvents: { name: string; targetTime: number }[];
+        seed: number;
+    },
+) {
     if (names.length == 0) {
         console.error(
             '[ERROR] No scene names provided.\n\tTry: mcas -s scene-1 scene-2 ...',
@@ -11,14 +19,19 @@ export async function handleScenes(names: string[]) {
         return;
     }
 
-    const defaultScene = (
-        await readFile(join(root(), './cli/assets/scenes/default-scene.tsx'), {
-            encoding: 'utf8',
-        })
-    )
-        .split('\n')
-        .slice(1)
-        .join('\n');
+    const defaultScene =
+        sceneContent ??
+        (
+            await readFile(
+                join(root(), './cli/assets/scenes/default-scene.tsx'),
+                {
+                    encoding: 'utf8',
+                },
+            )
+        )
+            .split('\n')
+            .slice(1)
+            .join('\n');
 
     const currentDir = resolve('.');
     const isMotionCanvas = await dirIsMotionCanvas(currentDir);
@@ -58,7 +71,7 @@ export async function handleScenes(names: string[]) {
             const data = new Uint8Array(
                 Buffer.from(
                     JSON.stringify(
-                        {
+                        dotMeta ?? {
                             version: 0,
                             timeEvents: [],
                             seed: Math.floor(Math.random() * 4294967296), // https://github.com/motion-canvas/motion-canvas/blob/944b48fff891c2cbbcc89ccb141ec197ecda4752/packages/core/src/scenes/Random.ts#L26
