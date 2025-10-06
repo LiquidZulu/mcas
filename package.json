@@ -58,7 +58,7 @@
         "@typescript-eslint/eslint-plugin": "^8.45.0",
         "@typescript-eslint/parser": "^8.44.1",
         "cross-env": "^10.1.0",
-        "eslint": "^9.35.0",
+        "eslint": "^9.37.0",
         "eslint-plugin-tsdoc": "^0.4.0",
         "husky": "^9.1.7",
         "lint-staged": "^16.2.3",
