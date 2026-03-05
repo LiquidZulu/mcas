@@ -52,7 +52,7 @@
         "@motion-canvas/vite-plugin": "^3.17.2",
         "@rollup/plugin-image": "^3.0.3",
         "@rollup/plugin-json": "^6.1.0",
-        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-terser": "^1.0.0",
         "@rollup/plugin-typescript": "^12.3.0",
         "@types/node": "^25.3.3",
         "@typescript-eslint/eslint-plugin": "^8.56.1",
