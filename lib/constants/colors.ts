@@ -4,6 +4,7 @@ export const bg = '#121316';
 export const bgpurple = '#030014';
 export const bggreen = '#031701';
 export const bgorange = '#140700';
+export const pdoomorange = '#FA581E';
 
 export const twitter = {
     light: '#ffffff',

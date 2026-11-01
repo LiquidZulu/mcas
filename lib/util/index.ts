@@ -1,3 +1,4 @@
+export * from './audio'
 export * from './hash';
 export * from './generateTxt';
 export * from './richTextUtils';

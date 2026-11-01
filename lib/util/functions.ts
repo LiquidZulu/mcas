@@ -1,3 +1,8 @@
+import { useScene } from "@motion-canvas/core";
+
+export { pipe } from '../../cli/src/util/pipe';
+export type { Fn } from '../../cli/src/util/pipe';
+
 export const I = (a: any) => a;
 
 /*
@@ -13,3 +18,5 @@ export function sinFactory(high?: number, low?: number, frequency?: number) {
     return (offset: number) => (x: number) =>
         A * Math.sin(x * 2 * Math.PI * f - offset * Math.PI) + B;
 }
+
+export const sceneVar = (name: string) => useScene().variables.get(name, undefined);

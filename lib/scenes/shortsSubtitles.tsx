@@ -145,7 +145,7 @@ export function* mkSubtitles(
             t
                 .children()[0]
                 .children()
-                .map(x => x.text())
+                .map(x => (x as McasTxt).text())
                 .join(' '),
         );
 

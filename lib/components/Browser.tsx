@@ -41,32 +41,34 @@ export interface BrowserProps extends RectProps {
     hyperlink?: SignalValue<string>;
     truncateHyperlink?: SignalValue<boolean>;
     highlight?: SignalValue<number>;
+    scrollbarHeight?: SignalValue<number>;
+    scrollbarWidth?: SignalValue<number>;
 }
 
 export class Browser extends Rect {
     @initial(new Color('#000000aa'))
     @colorSignal()
-    public declare readonly shadowColor: ColorSignal<this>;
+    declare public readonly shadowColor: ColorSignal<this>;
 
     @initial(50)
     @signal()
-    public declare readonly shadowBlur: SimpleSignal<number, this>;
+    declare public readonly shadowBlur: SimpleSignal<number, this>;
 
     @initial(new Vector2([0, 25]))
     @vector2Signal({ x: 'shadowOffsetX', y: 'shadowOffsetY' })
-    public declare readonly shadowOffset: Vector2Signal<this>;
+    declare public readonly shadowOffset: Vector2Signal<this>;
 
     @initial(20)
     @signal()
-    public declare readonly radius: SpacingSignal<this>;
+    declare public readonly radius: SpacingSignal<this>;
 
     @initial({ x: 1000, y: 800 })
     @vector2Signal({ x: 'width', y: 'height' })
-    public declare readonly size: Vector2LengthSignal<this>;
+    declare public readonly size: Vector2LengthSignal<this>;
 
     @initial(colors.zinc900)
     @colorSignal()
-    public declare readonly fill: ColorSignal<this>;
+    declare public readonly fill: ColorSignal<this>;
 
     @initial(0)
     @signal()
@@ -75,6 +77,14 @@ export class Browser extends Rect {
     @initial(60)
     @signal()
     public readonly scrollOffset: SimpleSignal<number, this>;
+
+    @initial(80)
+    @signal()
+    public readonly scrollbarHeight: SimpleSignal<number, this>;
+
+    @initial(10)
+    @signal()
+    public readonly scrollbarWidth: SimpleSignal<number, this>;
 
     @initial('')
     @signal()
@@ -141,7 +151,7 @@ export class Browser extends Rect {
                         fontSize={18}
                         text={() =>
                             this.truncateHyperlink()
-                                ? this.hyperlink().replace(/(.{42})..+/, '$1…')
+                                ? this.hyperlink().replace(/(.{40})..+/, '$1…')
                                 : this.hyperlink()
                         }
                     />
@@ -172,13 +182,19 @@ export class Browser extends Rect {
                 </Rect>
                 <Rect
                     layout={false}
-                    height={80}
-                    radius={10}
-                    width={10}
+                    height={this.scrollbarHeight}
+                    radius={this.scrollbarWidth}
+                    width={this.scrollbarWidth}
                     fill={colors.zinc700}
                     position={() => [
-                        500 - 10,
-                        -(800 - 80) / 2 + 50 + this.scroll() * 610,
+                        this.width() / 2 - this.scrollbarWidth(),
+                        -(this.height() - this.scrollbarHeight()) / 2 +
+                            50 +
+                            this.scroll() *
+                                (this.height() -
+                                    80 -
+                                    this.scrollbarHeight() -
+                                    20),
                     ]}
                 />
             </Rect>,
@@ -222,6 +238,7 @@ export class Browser extends Rect {
     }
 
     private addHighlight(props: RayProps, [a, b]: BrowserHighlight) {
+        console.log(typeof b);
         const f = new Vector2(a);
         const t =
             typeof b === 'number' ? new Vector2(f.x + b, f.y) : new Vector2(b);
@@ -271,5 +288,9 @@ export class Browser extends Rect {
         }
 
         yield* all(...toYield);
+    }
+
+    public addChild(child: Node) {
+        this.children()[1].children()[0].add(child);
     }
 }

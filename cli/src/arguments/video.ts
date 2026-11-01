@@ -6,9 +6,10 @@ import {
     getParentPackageJSON,
 } from '../util/fs';
 import { Innertube } from 'youtubei.js';
-const it = await Innertube.create();
 
 export async function handleVideo(videos: string[]) {
+    const it = await Innertube.create();
+
     const currentDir = process.cwd();
     const isMotionCanvas = await dirIsMotionCanvas(currentDir);
 

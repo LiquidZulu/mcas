@@ -1,9 +1,9 @@
-const { access, constants, readFile, writeFile, open } = require('fs/promises');
-const { createWriteStream, existsSync } = require('fs');
-const { dirname, join } = require('path');
-const axios = require('axios');
+import { access, constants, readFile, writeFile, open } from 'fs/promises';
+import { createWriteStream, existsSync } from 'fs';
+import { dirname, join } from 'path';
+import axios from 'axios';
 
-module.exports.download = (url, path) => {
+export const download = (url, path) => {
     if (!existsSync(path) && url) {
         console.log(url);
         axios({
@@ -21,7 +21,7 @@ module.exports.download = (url, path) => {
     }
 };
 
-module.exports.createAndWrite = async function (file, logging) {
+export async function createAndWrite(file, logging) {
     const log = logging === false ? (..._) => {} : console.log;
 
     try {
@@ -39,11 +39,10 @@ module.exports.createAndWrite = async function (file, logging) {
             throw e;
         }
     }
-};
+}
 
-module.exports.root = () => join(dirname(process.argv[1]), '../../');
-module.exports.getParentPackageJSON = getParentPackageJSON;
-async function getParentPackageJSON(dir) {
+export const root = () => join(dirname(process.argv[1]), '../../');
+export async function getParentPackageJSON(dir) {
     let currentDir = dir;
 
     // make this recursive at some point
@@ -65,7 +64,7 @@ async function getParentPackageJSON(dir) {
     }
 }
 
-module.exports.dirIsMotionCanvas = async function (dir) {
+export async function dirIsMotionCanvas(dir) {
     try {
         await access(join(dir), constants.R_OK | constants.W_OK);
     } catch (e) {
@@ -90,4 +89,4 @@ module.exports.dirIsMotionCanvas = async function (dir) {
     }
 
     return false;
-};
+}

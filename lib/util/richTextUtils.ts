@@ -1,5 +1,6 @@
 import { PossibleColor } from '@motion-canvas/core';
 import { TRichText } from '../';
+import { text } from 'stream/consumers';
 
 export const i = (text: string): TRichText => ({
     fontStyle: 'italic',
@@ -19,3 +20,7 @@ export const g = (text: string, color: PossibleColor): TRichText => ({
     glow: true,
     text,
 });
+export const c = (text: string, color: PossibleColor): TRichText => ({
+    fill: color,
+    text,
+})

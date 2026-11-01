@@ -13,6 +13,7 @@ import {
 import {
     ColorSignal,
     PossibleColor,
+    Reference,
     ReferenceArray,
     SignalValue,
     SimpleSignal,
@@ -21,6 +22,7 @@ import {
     all,
     chain,
     createRefArray,
+    createSignal,
     delay,
     sequence,
     waitFor,
@@ -29,42 +31,80 @@ import {
 
 import * as colors from '../constants/colors';
 import { McasTxt as Txt, McasTxtProps } from './McasTxt';
+import { mkSignal } from '../util';
+
+export type ArrowListAnimation = (
+    text: Txt,
+    ray: Ray,
+    duration?: number,
+    delay?: number,
+) => ThreadGenerator;
 
 export interface ArrowListProps extends RectProps {
     vgap?: SignalValue<number>;
     hgap?: SignalValue<number>;
     color?: SignalValue<PossibleColor>;
     rayColor?: SignalValue<PossibleColor>;
+    in?: ArrowListAnimation;
+    out?: ArrowListAnimation;
 }
 
+const defaultIn: ArrowListAnimation = (
+    text: Txt,
+    ray: Ray,
+    duration?: number,
+    delay?: number,
+) =>
+    all(
+        ray.end(1, duration ?? 1),
+        chain(waitFor(delay ?? 0.2), text.opacity(1, duration ?? 1)),
+    );
+
+const defaultOut: ArrowListAnimation = (
+    text: Txt,
+    ray: Ray,
+    duration?: number,
+    delay?: number,
+) =>
+    all(
+        ray.start(1, duration ?? 1),
+        chain(waitFor(delay ?? 0.2), text.opacity(0, duration ?? 1)),
+    );
+
 export class ArrowList extends Rect {
+    declare public readonly in: ArrowListAnimation;
+    declare public readonly out: ArrowListAnimation;
+
     @initial(64)
     @signal()
-    public declare readonly vgap: SimpleSignal<number, this>;
+    declare public readonly vgap: SimpleSignal<number, this>;
 
-    @initial(32)
+    @initial(64)
     @signal()
-    public declare readonly hgap: SimpleSignal<number, this>;
+    declare public readonly hgap: SimpleSignal<number, this>;
 
     @initial(colors.zinc50)
     @colorSignal()
-    public declare readonly color: ColorSignal<this>;
+    declare public readonly color: ColorSignal<this>;
 
     @initial(colors.zinc50)
     @colorSignal()
-    public declare readonly rayColor: ColorSignal<this>;
+    declare public readonly rayColor: ColorSignal<this>;
 
-    public declare readonly length: number;
-    public declare readonly items: ReferenceArray<Txt>;
-    private declare readonly rays: ReferenceArray<Ray>;
-    private declare readonly isShowing: Map<Txt, boolean>;
-    private declare readonly getRay: Map<Txt, Ray>;
+    declare public readonly length: number;
+    declare public readonly items: ReferenceArray<Txt>;
+    declare private readonly rays: ReferenceArray<Ray>;
+    declare private readonly isShowing: Map<Txt, boolean>;
+    declare private readonly getRay: Map<Txt, Ray>;
 
     @vector2Signal({ x: 'width', y: 'height' })
-    public declare readonly size: Vector2LengthSignal<this>;
+    declare public readonly size: Vector2LengthSignal<this>;
 
     public constructor(props?: ArrowListProps) {
         super(props);
+
+        this.in = props.in ?? defaultIn;
+        this.out = props.out ?? defaultOut;
 
         this.items = createRefArray<Txt>();
         this.rays = createRefArray<Ray>();
@@ -72,30 +112,34 @@ export class ArrowList extends Rect {
 
         this.add(
             <Rect
+                width="100%"
                 layout
                 direction="column"
                 gap={this.vgap}
                 {...('size' in props ? { size: this.size } : {})}
             >
                 {...this.children().map((x: Txt) => (
-                    <Rect alignItems="center" gap={this.hgap}>
+                    <Rect
+                        alignItems="center"
+                        gap={this.hgap}
+                        justifyContent="start"
+                    >
                         <Ray
                             end={0}
                             ref={this.rays}
-                            toX={50}
-                            lineWidth={6}
-                            stroke={this.rayColor}
+                            lineWidth={16}
+                            arrowSize={26}
                             endArrow
-                            arrowSize={12}
+                            toX={80}
+                            stroke={this.rayColor}
                         />
                         <Txt
-                            opacity={0}
                             ref={this.items}
                             fill={this.color}
                             textWrap={
                                 'textWrap' in x ? (x as any).textWrap() : false
                             }
-                            maxWidth={x.maxWidth}
+                            maxWidth="90%"
                         >
                             {x}
                         </Txt>
@@ -129,18 +173,12 @@ export class ArrowList extends Rect {
 
     public *show(item: Txt, duration?: number, delay?: number) {
         this.isShowing.set(item, true);
-        yield* all(
-            this.getRay.get(item).end(1, duration ?? 1),
-            chain(waitFor(delay ?? 0.2), item.opacity(1, duration ?? 1)),
-        );
+        yield* this.in(item, this.getRay.get(item), duration, delay);
     }
 
     public *hide(item: Txt, duration?: number, delay?: number) {
         this.isShowing.set(item, false);
-        yield* all(
-            this.getRay.get(item).start(1, duration ?? 1),
-            chain(waitFor(delay ?? 0.2), item.opacity(0, duration ?? 1)),
-        );
+        yield* this.out(item, this.getRay.get(item), duration, delay);
     }
 
     public *showAll(duration?: number, delayAmount?: number) {

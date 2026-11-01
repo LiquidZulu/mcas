@@ -1,15 +1,15 @@
-const {
+import {
     createAndWrite,
     dirIsMotionCanvas,
     getParentPackageJSON,
     download,
-} = require('./fs.js');
-const { dirname, join } = require('path');
-const { mkdir, writeFile, readFile } = require('fs/promises');
-const { Innertube } = require('youtubei.js');
-const randomVideos = require('./const/videos.js');
+} from './fs.js';
+import { dirname, join } from 'path';
+import { mkdir, writeFile, readFile } from 'fs/promises';
+import { Innertube } from 'youtubei.js';
+import randomVideos from './const/videos.js';
 
-module.exports.getRandomVideos = async function getRandomVideos(n) {
+export async function getRandomVideos(n) {
     const currentDir = process.cwd();
     const isMotionCanvas = await dirIsMotionCanvas(currentDir);
 
@@ -35,7 +35,7 @@ module.exports.getRandomVideos = async function getRandomVideos(n) {
     if (randomN >= n) {
         return Object.fromEntries(Object.entries(randomdb).slice(-n));
     }
-    const vids = await module.exports.getVideoInformation(
+    const vids = await getVideoInformation(
         ...randomVideos
             .sort(_ => Math.random() - 0.5)
             .filter(x => !(x.id in randomdb))
@@ -49,11 +49,9 @@ module.exports.getRandomVideos = async function getRandomVideos(n) {
     await writeFile(randomdbFile, JSON.stringify(randomdb));
 
     return vids;
-};
+}
 
-module.exports.getVideoInformation = async function getVideoInformation(
-    ...videos
-) {
+export async function getVideoInformation(...videos) {
     const currentDir = process.cwd();
     const isMotionCanvas = await dirIsMotionCanvas(currentDir);
 
@@ -178,4 +176,4 @@ module.exports.getVideoInformation = async function getVideoInformation(
     await writeFile(channeldbFile, JSON.stringify(channeldb));
 
     return requestedVideos;
-};
+}

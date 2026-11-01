@@ -1,7 +1,18 @@
-// I don't know why this can't be a module, but whatever...
-const express = require('express');
+// NOTE FOR FUTURE ME
+// this file is now deprecated (I think).
+// The mcasVitePlugin.ts generated now has everything required.
+// You didn't bother to document the process when you wrote this
+// code so idk why/whether this bs used to be required or if
+// motion-canvas/vite had some update or whatever that broke the
+// hacky solution, but here is the current process:
+// 1. mcas --init
+// 2. add mcas() plugin from './mcasVitePlugin' to vite.config.ts
+// 3. check environmentalism example.tsx for example.
+
+import express from 'express';
+import { getVideoInformation, getRandomVideos } from './util/yt.js';
+
 const app = express();
-const { getVideoInformation, getRandomVideos } = require('./util/yt.js');
 
 app.get('/mcas', async (req, res) => {
     if ('v' in req.query) {
@@ -15,12 +26,12 @@ app.get('/mcas', async (req, res) => {
     }
 });
 
-module.exports = function mcas() {
+export default function mcas() {
     return {
         name: 'mcas-vite-plugin',
-
         configureServer(server) {
             server.middlewares.use(app);
         },
+        apply: 'serve',
     };
-};
+}

@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     'https://www.youtube.com/watch?v=45Z-WP3xork',
     'https://www.youtube.com/watch?v=heMI7xe1yPM',
     'https://www.youtube.com/watch?v=wVX22d0_cg0',

@@ -1,3 +1,4 @@
+import { styleText } from 'node:util';
 import { basename, dirname, extname, format, resolve, parse } from 'path';
 import { dirIsMotionCanvas, getParentPackageJSON } from '../util/fs';
 import { exec as execSync, spawn } from 'child_process';
@@ -79,6 +80,7 @@ import {
   mkSubtitles,
   TranscriptAtom,
   subtitlesProps,
+  highFill,
 } from "mcas";
 import * as colors from "mcas/colors";
 import video from "${format({ ...parse(input), base: '', ext: '.mp4' })}";
@@ -210,7 +212,7 @@ async function whisper(
                 } catch (error) {
                     rej(
                         new Error(
-                            `Error processing JSON file: ${error.message}`,
+                            `Error processing JSON file: ${error.message}\n\n${styleText(['bold', 'green'], 'Did you remember to render the audio to assets/video.wav or the custom location?')}\n`,
                         ),
                     );
                 }

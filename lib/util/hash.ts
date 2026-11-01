@@ -10,7 +10,7 @@ export function fnv1a(str: string): number {
 const MAX_CODE_POINT = 0x10ffff + 1;
 
 export function unicodeHash(input: string, length: number = 1): string {
-  const hash = fnv1a(input);
+  const hash = fnv1a(input.toLowerCase());
   let result = '';
   let temp = hash;
 
